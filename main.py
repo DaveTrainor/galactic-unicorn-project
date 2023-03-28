@@ -3,4 +3,4 @@ from settings import screen
 
 screen = load_screen(screen.get('driver'))
 
-screen().show_text('HO HO HO!')
+screen().show_text('Hey')
