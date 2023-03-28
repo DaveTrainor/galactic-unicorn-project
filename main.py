@@ -1,6 +1,6 @@
-from app.screen import available_screens
+from app.screen import load_screen
 from settings import screen
 
-screen = available_screens.get(screen.get('driver'))
+screen = load_screen(screen.get('driver'))
 
 screen().show_text('HO HO HO!')
