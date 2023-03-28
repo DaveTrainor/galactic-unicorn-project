@@ -1,12 +1,12 @@
 from .BaseScreen import BaseScreen
-from picounicorn import PicoUnicorn
-from picographics import PicoGraphics, DISPLAY_UNICORN_PACK
+from galactic import GalacticUnicorn
+from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN
 
 
-class PicoUnicornScreen(BaseScreen):
+class PicoGalacticUnicornScreen(BaseScreen):
     def __init__(self):
-        self.screen = PicoUnicorn()
-        self.display = PicoGraphics(display=DISPLAY_UNICORN_PACK)
+        self.screen = GalacticUnicorn()
+        self.display = PicoGraphics(display=DISPLAY_GALACTIC_UNICORN)
         self.pens = {
             'WHITE': self.display.create_pen(100, 100, 100)
         }
