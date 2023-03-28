@@ -1,0 +1,2 @@
+class BaseScreen:
+    pass
