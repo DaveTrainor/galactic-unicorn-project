@@ -17,10 +17,17 @@ class PicoGalacticUnicornScreen(BaseScreen):
             'BLUE': self.display.create_pen(10, 10, 100),
         }
 
-    def show_text(self, text):
+    def show_text(self, text, alignment, colour):
+        scale = 2
+        thickness = 2
         self.display.set_font('bitmap6')
-        self.display.set_pen(self.pens.get('WHITE'))
-        self.display.text(text, 1, 0, scale=0.1)
+        self.display.set_thickness(thickness)
+        self.display.set_pen(self.pens.get(colour))
+        text_width = self.display.measure_text(text,scale)
+        width, height = self.display.get_bounds()
+        if alignment == 'centre':
+            start_x = int((width-text_width)/2)+2
+        self.display.text(text, start_x, -1, scale=scale)
         self.screen.update(self.display)
 
     def show_sprite(self):
@@ -72,6 +79,7 @@ class PicoGalacticUnicornScreen(BaseScreen):
             self.screen.update(self.display)
             p1 += 1
             time.sleep(0.05)
+
 
 
 
