@@ -1,19 +1,29 @@
 import sys
+from importlib import reload
 
 
-def get_requests_mock(mocker):
-    module = type(sys)('urequests')
+class Response:
+    json_response = {}
 
-    class Response:
-        def json(self):
-            return {'test': 'response'}
+    def __init__(self, json_response=None):
+        self.json_response = {} if json_response is None else json_response
 
-    def get_request(url):
-        return Response()
+    def json(self):
+        return self.json_response
 
-    module.get = get_request
-    sys.modules['urequests'] = module
 
-    import urequests as requests
+def get_requests_mock(mocker, json_response=None):
+    try:
+        del sys.modules['urequests']
+    except KeyError:
+        pass
+    try:
+        import urequests.urequests as urequests
+    except ImportError:
+        reload(urequests.urequests)
+    sys.modules['urequests'] = urequests
 
-    return mocker.spy(requests, 'get')
+    mock = mocker.patch('urequests.get')
+    mock.return_value = Response(json_response)
+
+    return mock
