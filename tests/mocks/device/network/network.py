@@ -1,6 +1,6 @@
 import sys
 
-from app.device import BaseNetwork
+from app.device.network.BaseNetwork import BaseNetwork
 from tests.mocks.device.network.network_module import WLAN
 
 
