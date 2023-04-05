@@ -36,7 +36,4 @@ class Settings:
 
 class SettingsLoadError(Exception):
     def __init__(self, setting=None):
-        if setting is not None:
-            super().__init__(f'Cannot load setting {setting}')
-
         super().__init__('Cannot load settings, check settings.py')

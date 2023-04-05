@@ -2,6 +2,7 @@ import builtins
 from importlib import reload
 import tests.mocks.settings as mock_settings
 import app.settings
+import pytest
 
 
 def test_full_settings_file(mocker):
@@ -40,9 +41,9 @@ def test_screen_only_settings_file(mocker):
     print_mock.assert_any_call('[settings.network.password] did not find value in settings.py')
 
 
-def test_no_existing_settings_file(mocker):
+def test_no_settings_in_file(mocker):
     print_mock = mocker.spy(builtins, 'print')
-    mock_settings.no_module()
+    mock_settings.no_settings_in_file()
     reload(app.settings)
     settings = app.settings.Settings()
 
@@ -56,3 +57,17 @@ def test_no_existing_settings_file(mocker):
     print_mock.assert_any_call('[settings.network.driver] did not find value in settings.py')
     print_mock.assert_any_call('[settings.network.ssid] did not find value in settings.py')
     print_mock.assert_any_call('[settings.network.password] did not find value in settings.py')
+
+
+def test_no_settings_file(mocker):
+    stop_mock = mock_settings.no_settings_file(mocker)
+    reload(app.settings)
+    with pytest.raises(Exception) as e:
+        settings = app.settings.Settings()
+        assert None is settings.screen.driver
+        assert None is settings.network.driver
+        assert None is settings.network.ssid
+        assert None is settings.network.password
+        assert str(e.value) == 'Cannot load settings, check settings.py'
+
+    stop_mock()
