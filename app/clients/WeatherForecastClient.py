@@ -1,4 +1,4 @@
-from .BaseClient import BaseClient
+from app.clients.BaseClient import BaseClient
 
 
 class WeatherForecastClient(BaseClient):

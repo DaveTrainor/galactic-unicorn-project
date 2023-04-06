@@ -1,6 +1,6 @@
 import network
-from .BaseNetwork import BaseNetwork
-from ...settings import NetworkSettings
+from app.device.network.BaseNetwork import BaseNetwork
+from app.settings import NetworkSettings
 
 
 class PicoWNetwork(BaseNetwork):
