@@ -33,6 +33,9 @@ class PicoUnicornScreen(BaseScreen):
             offset += section_width + 1
 
     def next_frame(self):
+        if self.current_page is None:
+            return None
+
         if self.current_page.is_animated:
             offset = 0
             for section in self.current_page.sections:
