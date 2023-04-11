@@ -17,3 +17,6 @@ class BaseScreen:
 
     def __init__(self, settings: ScreenSettings):
         pass
+
+    def get_sprite_sheet_filename(self, name):
+        return f'app/sprites/{name}.{self.attributes.sprite_extension}'
