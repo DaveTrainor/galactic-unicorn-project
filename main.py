@@ -1,4 +1,3 @@
-import time
 import uasyncio as asyncio
 
 from app.clients.TimeClient import TimeClient
@@ -21,18 +20,17 @@ try:
             ])
             devices.screen.clear()
             devices.screen.show_page(time_page)
-            counter = 0
-            while True:
-                devices.screen.clear()
-                devices.screen.next_frame()
-                await asyncio.sleep(0.2)
-                counter += 1
-                if counter > 20:
-                    break
-            await asyncio.sleep(5)
+            await asyncio.sleep(30)
+
+    def animate_screen():
+        while True:
+            devices.screen.clear()
+            devices.screen.next_frame()
+            await asyncio.sleep(0.1)
 
     async def main_loop():
         asyncio.create_task(slideshow())
+        asyncio.create_task(animate_screen())
         while True:
             await asyncio.sleep(1)
 
