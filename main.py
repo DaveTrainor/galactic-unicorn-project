@@ -1,37 +1,42 @@
-from app.screen import load_screen
 import time
-import network
-import settings
-from urequests import get as http_get
+import uasyncio as asyncio
 
-screen = settings.screen
+from app.clients.TimeClient import TimeClient
+from app.clients.WeatherForecastClient import WeatherForecastClient
+from app.device import setup_devices
+from app.page.Page import Page
+from app.page.PageSection import PageSection, PageSectionType
 
-wlan = network.WLAN(network.STA_IF)
-wlan.active(True)
-wlan.connect(
-    settings.wifi_access_point,
-    settings.wifi_password
-)
+devices = setup_devices()
+weather_client = WeatherForecastClient()
+time_client = TimeClient()
+try:
+    def slideshow():
+        while True:
+            current_time = time_client.get_time()
+            time_page = Page([
+                # PageSection(PageSectionType.SPRITE, ('icons', (0, 0))),
+                # PageSection(PageSectionType.TEXT, ('Hello!', (100, 100, 100))),
+                PageSection(PageSectionType.TEXT, (current_time, (255, 255, 255))),
+            ])
+            devices.screen.clear()
+            devices.screen.show_page(time_page)
+            counter = 0
+            while True:
+                devices.screen.clear()
+                devices.screen.next_frame()
+                await asyncio.sleep(0.2)
+                counter += 1
+                if counter > 20:
+                    break
+            await asyncio.sleep(5)
 
-while not wlan.isconnected():
-    print('Waiting for connection...')
-    time.sleep(1)
+    async def main_loop():
+        asyncio.create_task(slideshow())
+        while True:
+            await asyncio.sleep(1)
 
-ip_address, subnet, gateway, dns = wlan.ifconfig()
-print(f'ip: {ip_address}\ngateway: {gateway}')
 
-r = http_get("https://api.open-meteo.com/v1/forecast?latitude=53.55&longitude=2.01&current_weather=true&hourly"
-             "=temperature_2m,relativehumidity_2m,windspeed_10m")
-
-temp = str(r.json()['current_weather']['temperature'])
-
-# temp = str(10.0)
-temp_display = temp + '°C'
-colour = 'GREEN'
-if float(temp) >= 20:
-    colour = 'RED'
-if float(temp) <= 4:
-    colour = 'BLUE'
-
-screen = load_screen(screen.get('driver'))
-screen().show_text(temp_display, 'centre', colour)
+    asyncio.run(main_loop())
+except Exception as e:
+    devices.screen.show_error(e)

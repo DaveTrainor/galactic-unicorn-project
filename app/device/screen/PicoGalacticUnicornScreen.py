@@ -3,10 +3,14 @@ import time
 from .BaseScreen import BaseScreen
 from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN, PEN_RGB332
+from app.settings import ScreenSettings
 
 
 class PicoGalacticUnicornScreen(BaseScreen):
-    def __init__(self):
+    sprite_extension = 'rgb332'
+
+    def __init__(self, settings: ScreenSettings):
+        super().__init__(settings)
         self.screen = GalacticUnicorn()
         self.display = PicoGraphics(display=DISPLAY_GALACTIC_UNICORN, pen_type=PEN_RGB332)
         self.pens = {

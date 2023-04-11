@@ -2,6 +2,8 @@ from .BaseScreen import BaseScreen
 from app.settings import ScreenSettings
 
 available_screens = {
+    'pico_unicorn': 'PicoUnicornScreen',
+    'galactic_unicorn': 'PicoGalacticUnicornScreen',
 }
 
 
