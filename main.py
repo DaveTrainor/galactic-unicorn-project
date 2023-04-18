@@ -1,30 +1,45 @@
-from picounicorn import PicoUnicorn
-from picographics import PicoGraphics, DISPLAY_UNICORN_PACK, PEN_RGB888
+from galactic import GalacticUnicorn
+from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN, PEN_RGB332
 import time
 
-display = PicoGraphics(display=DISPLAY_UNICORN_PACK, pen_type=PEN_RGB888)
-screen = PicoUnicorn()
+display = PicoGraphics(display=DISPLAY_GALACTIC_UNICORN, pen_type=PEN_RGB332)
+screen = GalacticUnicorn()
 # screen = hardware
 # display = abstract screen
 x = 1
 y = 0
 
+x1 = screen.WIDTH -2
+y1 = 0
+
 red = display.create_pen(255, 0, 0)
+blue = display.create_pen(0, 0, 255)
 blank = display.create_pen(0, 0, 0)
 
 while True:
-    if screen.is_pressed(screen.BUTTON_A):
+    if screen.is_pressed(screen.SWITCH_A):
         y = max(0, y - 1)
-    elif screen.is_pressed(screen.BUTTON_B):
-        y = min(screen.get_height() - 2, y + 1)
-    
+    elif screen.is_pressed(screen.SWITCH_D):
+        y = min(screen.HEIGHT - 2, y + 1)
+        
+    if screen.is_pressed(screen.SWITCH_VOLUME_UP):
+        y1 = max(0, y1 - 1)
+    elif screen.is_pressed(screen.SWITCH_BRIGHTNESS_DOWN):
+        y1 = min(screen.HEIGHT - 2, y1 + 1)
+
     display.set_pen(blank)
     display.clear()
     display.set_pen(red)
     display.pixel(x, y)
     display.pixel(x, y+1)
+    
+    display.set_pen(blue)
+    display.pixel(x1, y1)
+    display.pixel(x1, y1+1)
     screen.update(display)
     time.sleep(0.1)
+
+
 
 # from picounicorn import PicoUnicorn
 # from picographics import PicoGraphics, DISPLAY_UNICORN_PACK, PEN_RGB888
