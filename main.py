@@ -1,6 +1,7 @@
 from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN, PEN_RGB332
 import time
+import math
 
 display = PicoGraphics(display=DISPLAY_GALACTIC_UNICORN, pen_type=PEN_RGB332)
 screen = GalacticUnicorn()
@@ -12,9 +13,13 @@ y = 0
 x1 = screen.WIDTH -2
 y1 = 0
 
+x2,y2 = 3, math.floor(screen.HEIGHT/2)
+
 red = display.create_pen(255, 0, 0)
 blue = display.create_pen(0, 0, 255)
+green = display.create_pen(0, 255, 0)
 blank = display.create_pen(0, 0, 0)
+x_velocity = 1.0
 
 while True:
     if screen.is_pressed(screen.SWITCH_A):
@@ -36,6 +41,17 @@ while True:
     display.set_pen(blue)
     display.pixel(x1, y1)
     display.pixel(x1, y1+1)
+
+    display.set_pen(green)
+    display.pixel(int(x2), y2)
+    x2 += x_velocity
+
+    if x2 == screen.WIDTH - 3 and (y1 == y2 or y1+1 == y2):
+        x_velocity = -x_velocity
+    elif x2 == 2 and (y == y2 or y+1 == y2):
+        x_velocity = -x_velocity
+
+
     screen.update(display)
     time.sleep(0.1)
 
