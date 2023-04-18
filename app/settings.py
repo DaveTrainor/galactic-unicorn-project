@@ -7,10 +7,12 @@ class NetworkSettings:
     ssid: str = None
     password: str = None
 
-
+class LocaleSettings:
+    coordinates: (float, float) = None
 class Settings:
     screen = ScreenSettings()
     network = NetworkSettings()
+    locale = LocaleSettings()
 
     def __init__(self):
         print('[settings] loading device settings')
@@ -24,6 +26,7 @@ class Settings:
         self.__attempt_load('network', 'driver')
         self.__attempt_load('network', 'ssid')
         self.__attempt_load('network', 'password')
+        self.__attempt_load('locale', 'coordinates')
 
     def __attempt_load(self, setting_block, setting_property):
         try:

@@ -31,10 +31,39 @@ class BaseScreen:
             return self.display.measure_text(text, 1), self.attributes.height
 
     def show_page(self, page: Page):
-        raise NotImplemented
+        offset = 0
+        self.load_page(page)
+
+        for section in page.sections:
+            section_width, _ = self.get_section_bounds(section)
+            self.show_page_section(section, offset)
+            if offset + section_width > self.attributes.width:
+                page.is_animated = True
+            offset += section_width + 1
+
+    def show_page_section(self, section: PageSection, offset=0):
+        if section.type == PageSectionType.TEXT:
+            text, colour = section.contents
+            self.show_text((offset, 0), text, colour)
+        if section.type == PageSectionType.SPRITE:
+            sprite_sheet, sheet_position = section.contents
+            self.show_sprite(sprite_sheet, sheet_position, (offset, 0))
 
     def next_frame(self):
-        raise NotImplemented
+        if self.current_page is None:
+            return None
+
+        if self.current_page.is_animated:
+            offset = 0
+            for section in self.current_page.sections:
+                section_width, _ = self.get_section_bounds(section)
+
+                if offset + section_width > self.attributes.width:
+                    if section_width - section.animation_frame < 0:
+                        section.animation_frame = 0
+                    self.show_page_section(section, offset - section.animation_frame)
+                    section.animation_frame += 1
+                offset += section_width
 
     def clear(self, bounding=None, colour=(0, 0, 0)):
         self.display.set_pen(self.display.create_pen(*self.colour_correction(colour)))
@@ -55,4 +84,4 @@ class BaseScreen:
         raise Exception(message)
 
     def colour_correction(self, colour):
-        raise NotImplemented
+        raise NotImplementedError

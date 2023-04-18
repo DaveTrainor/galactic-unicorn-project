@@ -21,33 +21,6 @@ class PicoUnicornScreen(BaseScreen):
         self.display = PicoGraphics(display=DISPLAY_UNICORN_PACK, pen_type=PEN_RGB888)
         self.display.set_font('bitmap6')
 
-    def show_page(self, page: Page):
-        offset = 0
-        self.load_page(page)
-
-        for section in page.sections:
-            section_width, _ = self.get_section_bounds(section)
-            self.show_page_section(section, offset)
-            if offset + section_width > self.attributes.width:
-                page.is_animated = True
-            offset += section_width + 1
-
-    def next_frame(self):
-        if self.current_page is None:
-            return None
-
-        if self.current_page.is_animated:
-            offset = 0
-            for section in self.current_page.sections:
-                section_width, _ = self.get_section_bounds(section)
-
-                if offset + section_width > self.attributes.width:
-                    if section_width - section.animation_frame < 0:
-                        section.animation_frame = 0
-                    self.show_page_section(section, offset - section.animation_frame)
-                    section.animation_frame += 1
-                offset += section_width
-
     def load_page(self, page: Page):
         sprites = {}
         self.current_page = page
@@ -60,14 +33,6 @@ class PicoUnicornScreen(BaseScreen):
                     sprites[sprite_sheet].append(sheet_position)
         for name in sprites.keys():
             self.load_sprites(name, sprites[name])
-
-    def show_page_section(self, section: PageSection, offset=0):
-        if section.type == PageSectionType.TEXT:
-            text, colour = section.contents
-            self.show_text((offset, 0), text, colour)
-        if section.type == PageSectionType.SPRITE:
-            sprite_sheet, sheet_position = section.contents
-            self.show_sprite(sprite_sheet, sheet_position, (offset, 0))
 
     def empty(self):
         self.sprite_sheet_pens = {}

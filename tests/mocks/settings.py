@@ -17,6 +17,9 @@ def full_settings():
         'ssid': 'test_network_ssid',
         'password': 'test_network_password',
     }
+    module.locale = {
+        'coordinates': (10.20, 20.50)
+    }
     sys.modules['settings'] = module
 
 

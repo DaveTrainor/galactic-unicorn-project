@@ -15,12 +15,14 @@ def test_full_settings_file(mocker):
     assert 'test_network_driver' == settings.network.driver
     assert 'test_network_ssid' == settings.network.ssid
     assert 'test_network_password' == settings.network.password
+    assert (10.20, 20.50) == settings.locale.coordinates
 
     print_mock.assert_any_call('[settings] loading device settings')
     print_mock.assert_any_call('[settings.screen.driver] loaded')
     print_mock.assert_any_call('[settings.network.driver] loaded')
     print_mock.assert_any_call('[settings.network.ssid] loaded')
     print_mock.assert_any_call('[settings.network.password] loaded')
+    print_mock.assert_any_call('[settings.locale.coordinates] loaded')
 
 
 def test_screen_only_settings_file(mocker):

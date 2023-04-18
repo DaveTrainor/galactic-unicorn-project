@@ -16,7 +16,7 @@ Make changes to or create the `settings.py` file depending on your usage.
 screen = {
     'driver': 'pico_unicorn',
 }
-wifi = {
+network = {
     'driver': 'pico_w',
     'ssid': '<wifi network name>',
     'password': '<wifi network password>',
