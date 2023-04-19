@@ -1,14 +1,21 @@
 import time
 
-from .BaseScreen import BaseScreen
+from .BaseScreen import BaseScreen, ScreenAttributes
 from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN, PEN_RGB332
+from app.settings import ScreenSettings
+from app.page.Page import Page
 
 
 class PicoGalacticUnicornScreen(BaseScreen):
-    def __init__(self):
+    attributes = ScreenAttributes(sprite_size=8, sprite_extension='rgb332', width=53, height=11)
+    dimness = 2
+
+    def __init__(self, settings: ScreenSettings):
+        super().__init__(settings)
         self.screen = GalacticUnicorn()
         self.display = PicoGraphics(display=DISPLAY_GALACTIC_UNICORN, pen_type=PEN_RGB332)
+        self.display.set_font('bitmap6')
         self.pens = {
             'WHITE': self.display.create_pen(100, 100, 100),
             'BLACK': self.display.create_pen(0, 0, 0),
@@ -17,18 +24,24 @@ class PicoGalacticUnicornScreen(BaseScreen):
             'BLUE': self.display.create_pen(10, 10, 100),
         }
 
-    def show_text(self, text, alignment, colour):
-        scale = 2
-        thickness = 2
+    def colour_correction(self, colour):
+        r, g, b = colour
+
+        r = int(r / self.dimness)
+        g = int(g / self.dimness)
+        b = int(b / self.dimness)
+        return [r, g, b]
+
+    def load_page(self, page: Page):
+        self.current_page = page
+
+    def show_text(self, position, text, colour=(100, 100, 100)):
+        print(text)
         self.display.set_font('bitmap6')
-        self.display.set_thickness(thickness)
-        self.display.set_pen(self.pens.get(colour))
-        text_width = self.display.measure_text(text,scale)
-        width, height = self.display.get_bounds()
-        if alignment == 'centre':
-            start_x = int((width-text_width)/2)+2
-        self.display.text(text, start_x, -1, scale=scale)
+        self.display.set_pen(self.display.create_pen(*self.colour_correction(colour)))
+        self.display.text(text, position[0], position[1], scale=1)
         self.screen.update(self.display)
+        return self
 
     def show_sprite(self):
         self.display.load_spritesheet("app/sprites/pirate.rgb332")
@@ -79,9 +92,3 @@ class PicoGalacticUnicornScreen(BaseScreen):
             self.screen.update(self.display)
             p1 += 1
             time.sleep(0.05)
-
-
-
-
-
-

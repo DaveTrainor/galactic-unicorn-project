@@ -57,43 +57,61 @@ while True:
 
 
 
-# from picounicorn import PicoUnicorn
-# from picographics import PicoGraphics, DISPLAY_UNICORN_PACK, PEN_RGB888
-# import time
-
-# # create a PicoGraphics framebuffer to draw into
-# graphics = PicoGraphics(display=DISPLAY_UNICORN_PACK, pen_type=PEN_RGB888)
-
-# # create our GalacticUnicorn object
-# gu = PicoUnicorn()
-
-# # start position for scrolling (off the side of the display)
-# scroll = float(-PicoUnicorn.WIDTH)
-
-# # message to scroll
-# MESSAGE = "Boo"
-
-# # pen colours to draw with
-# BLACK = graphics.create_pen(0, 0, 0)
-# PURPLE = graphics.create_pen(255, 0, 255)
-
-# while True:
-#     # determine the scroll position of the text
-#     width = graphics.measure_text(MESSAGE, 0.4)
-#     scroll += 0.25
-#     if scroll > width:
-#       scroll = float(-PicoUnicorn.WIDTH)
-
-#     # clear the graphics object
-#     graphics.set_pen(BLACK)
-#     graphics.clear()
-
-#     # draw the text
-#     graphics.set_pen(PURPLE)
-#     # text, x, y, wordwrap, scale, angle, spacing
-#     graphics.text(MESSAGE, round(0 - scroll), 0, scale=0.4)
-
-#     # update the display
-#     gu.update(graphics)
-
-#     time.sleep(0.02)
+# import uasyncio as asyncio
+#
+# import app.settings
+# from app.clients.TimeClient import TimeClient
+# from app.clients.WeatherForecastClient import WeatherForecastClient
+# from app.device import setup_devices
+# from app.page.Page import Page
+# from app.page.PageSection import PageSection, PageSectionType
+#
+# devices = setup_devices()
+# settings = app.settings.Settings()
+#
+# weather_client = WeatherForecastClient()
+# time_client = TimeClient()
+#
+# try:
+#     def show_time():
+#         while True:
+#             current_time = time_client.get_time()
+#             time_page = Page([
+#                 PageSection(PageSectionType.TEXT, (current_time, (255, 255, 255))),
+#             ])
+#             devices.screen.clear()
+#             devices.screen.show_page(time_page)
+#             await asyncio.sleep(30)
+#
+#
+#     def show_weather():
+#         while True:
+#             current_temp, temp_colour = weather_client.get_temperature(settings.locale.coordinates)
+#             time_page = Page([
+#                 PageSection(PageSectionType.TEXT, (current_temp, temp_colour)),
+#             ])
+#             devices.screen.clear()
+#             devices.screen.show_page(time_page)
+#             await asyncio.sleep(30)
+#
+#
+#     def animate_screen():
+#         while True:
+#             devices.screen.clear()
+#             devices.screen.next_frame()
+#             await asyncio.sleep(0.1)
+#
+#
+#     async def main_loop():
+#         # asyncio.create_task(animate_screen())
+#         asyncio.create_task(show_time())
+#         await asyncio.sleep(15)
+#         asyncio.create_task(show_weather())
+#         while True:
+#             await asyncio.sleep(1)
+#
+#
+#     asyncio.run(main_loop())
+# except Exception as e:
+#     devices.screen.show_error(e)
+# >>>>>>> feat/framework-updates
