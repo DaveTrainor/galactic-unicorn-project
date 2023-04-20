@@ -85,3 +85,9 @@ class BaseScreen:
 
     def colour_correction(self, colour):
         raise NotImplementedError
+
+    def is_pressed(self, button):
+        try:
+            return self.screen.is_pressed(self.buttons[button])
+        except KeyError:
+            raise Exception(f'Button {button} does not exist on this screen')

@@ -1,58 +1,61 @@
-from galactic import GalacticUnicorn
-from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN, PEN_RGB332
+import app.settings
+from app.device import setup_devices
+
+
+from picographics import PicoGraphics, PEN_RGB332
 import time
 import math
 
-display = PicoGraphics(display=DISPLAY_GALACTIC_UNICORN, pen_type=PEN_RGB332)
-screen = GalacticUnicorn()
+devices = setup_devices()
+settings = app.settings.Settings()
+
+# display = PicoGraphics(display=DISPLAY_GALACTIC_UNICORN, pen_type=PEN_RGB332)
+# screen = GalacticUnicorn()
 # screen = hardware
 # display = abstract screen
+
 x = 1
 y = 0
 
-x1 = screen.WIDTH -2
+x1 = devices.screen.attributes.width -2
 y1 = 0
 
-x2,y2 = 3, math.floor(screen.HEIGHT/2)
+x2,y2 = 3, math.floor(devices.screen.attributes.height/2)
 
-red = display.create_pen(255, 0, 0)
-blue = display.create_pen(0, 0, 255)
-green = display.create_pen(0, 255, 0)
-blank = display.create_pen(0, 0, 0)
+# red = display.create_pen(255, 0, 0)
+# blue = display.create_pen(0, 0, 255)
+# green = display.create_pen(0, 255, 0)
+# blank = display.create_pen(0, 0, 0)
 x_velocity = 1.0
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
 
 while True:
-    if screen.is_pressed(screen.SWITCH_A):
+    if devices.screen.is_pressed('left_1'):
         y = max(0, y - 1)
-    elif screen.is_pressed(screen.SWITCH_D):
-        y = min(screen.HEIGHT - 2, y + 1)
+    elif devices.screen.is_pressed('left_4'):
+        y = min(devices.screen.attributes.height - 2, y + 1)
         
-    if screen.is_pressed(screen.SWITCH_VOLUME_UP):
+    if devices.screen.is_pressed('right_1'):
         y1 = max(0, y1 - 1)
-    elif screen.is_pressed(screen.SWITCH_BRIGHTNESS_DOWN):
-        y1 = min(screen.HEIGHT - 2, y1 + 1)
+    elif devices.screen.is_pressed('right_4'):
+        y1 = min(devices.screen.attributes.height - 2, y1 + 1)
 
-    display.set_pen(blank)
-    display.clear()
-    display.set_pen(red)
-    display.pixel(x, y)
-    display.pixel(x, y+1)
-    
-    display.set_pen(blue)
-    display.pixel(x1, y1)
-    display.pixel(x1, y1+1)
+    devices.screen.clear()
+    devices.screen.clear(((x, y),(1,2)),RED)
 
-    display.set_pen(green)
-    display.pixel(int(x2), y2)
+
+    devices.screen.clear(((x1, y1), (1, 2)), BLUE)
+    devices.screen.clear(((int(x2), y2), (1, 1)), GREEN)
     x2 += x_velocity
 
-    if x2 == screen.WIDTH - 3 and (y1 == y2 or y1+1 == y2):
+    if x2 == devices.screen.attributes.width - 3 and (y1 == y2 or y1+1 == y2):
         x_velocity = -x_velocity
     elif x2 == 2 and (y == y2 or y+1 == y2):
         x_velocity = -x_velocity
 
 
-    screen.update(display)
     time.sleep(0.1)
 
 
