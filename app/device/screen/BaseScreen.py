@@ -71,9 +71,16 @@ class BaseScreen:
         if bounding is None:
             self.display.clear()
         else:
-            ((x, y), (width, height)) = bounding
-            self.display.rectangle(x, y, width, height)
+            self.rectangle(bounding, colour)
 
+        self.screen.update(self.display)
+        return self
+
+    def rectangle(self, bounding=None, colour=(255,255,255)):
+        self.display.set_pen(self.display.create_pen(*self.colour_correction(colour)))
+
+        ((x, y), (width, height)) = bounding
+        self.display.rectangle(x, y, width, height)
         self.screen.update(self.display)
         return self
 

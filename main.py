@@ -1,58 +1,59 @@
 import app.settings
 from app.device import setup_devices
 
-
-from picographics import PicoGraphics, PEN_RGB332
 import time
 import math
 
 devices = setup_devices()
 settings = app.settings.Settings()
 
-# display = PicoGraphics(display=DISPLAY_GALACTIC_UNICORN, pen_type=PEN_RGB332)
-# screen = GalacticUnicorn()
-# screen = hardware
-# display = abstract screen
-
-x = 1
-y = 0
-
-x1 = devices.screen.attributes.width -2
-y1 = 0
-
-x2,y2 = 3, math.floor(devices.screen.attributes.height/2)
-
-# red = display.create_pen(255, 0, 0)
-# blue = display.create_pen(0, 0, 255)
-# green = display.create_pen(0, 255, 0)
-# blank = display.create_pen(0, 0, 0)
 x_velocity = 1.0
+paddle_size = 3
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
-while True:
+
+
+left_paddle = {'x': 1,
+               'y': math.floor(devices.screen.attributes.height / 2),
+               'colour': RED}
+
+right_paddle = {'x': devices.screen.attributes.width -2,
+                'y': math.floor(devices.screen.attributes.height / 2),
+                'colour': BLUE}
+
+ball = {'x': 3,
+        'y': math.floor(devices.screen.attributes.height / 2),
+        'colour': GREEN}
+
+
+def button_watcher():
     if devices.screen.is_pressed('left_1'):
-        y = max(0, y - 1)
+        left_paddle['y'] = max(0, left_paddle['y'] - 1)
     elif devices.screen.is_pressed('left_4'):
-        y = min(devices.screen.attributes.height - 2, y + 1)
-        
+        left_paddle['y'] = min(devices.screen.attributes.height - paddle_size, left_paddle['y'] + 1)
+
     if devices.screen.is_pressed('right_1'):
-        y1 = max(0, y1 - 1)
+        right_paddle['y'] = max(0, right_paddle['y'] - 1)
     elif devices.screen.is_pressed('right_4'):
-        y1 = min(devices.screen.attributes.height - 2, y1 + 1)
+        right_paddle['y'] = min(devices.screen.attributes.height - paddle_size, right_paddle['y'] + 1)
+
+
+while True:
+    button_watcher()
 
     devices.screen.clear()
-    devices.screen.clear(((x, y),(1,2)),RED)
+    devices.screen.rectangle(((left_paddle['x'], left_paddle['y']), (1, paddle_size)), left_paddle['colour'])
 
+    devices.screen.rectangle(((right_paddle['x'], right_paddle['y']), (1, paddle_size)), right_paddle['colour'])
+    devices.screen.clear(((int(ball['x']), ball['y']), (1, 1)), ball['colour'])
+    ball['x'] += x_velocity
 
-    devices.screen.clear(((x1, y1), (1, 2)), BLUE)
-    devices.screen.clear(((int(x2), y2), (1, 1)), GREEN)
-    x2 += x_velocity
-
-    if x2 == devices.screen.attributes.width - 3 and (y1 == y2 or y1+1 == y2):
+    if ball['x'] == devices.screen.attributes.width - 3 and\
+            (right_paddle['y'] <= ball['y'] <= right_paddle['y'] + paddle_size-1):
         x_velocity = -x_velocity
-    elif x2 == 2 and (y == y2 or y+1 == y2):
+    elif ball['x'] == 2 and (left_paddle['y'] <= ball['y'] <= left_paddle['y'] + paddle_size-1):
         x_velocity = -x_velocity
 
 
@@ -117,4 +118,4 @@ while True:
 #     asyncio.run(main_loop())
 # except Exception as e:
 #     devices.screen.show_error(e)
-# >>>>>>> feat/framework-updates
+
