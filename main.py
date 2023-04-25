@@ -14,46 +14,54 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
 
+class Paddle:
+    def __init__(self, x_start, colour):
+        self.x = int(x_start)
+        self.y = math.floor((devices.screen.attributes.height - paddle_size) / 2)
+        self.colour = colour
 
-left_paddle = {'x': 1,
-               'y': math.floor(devices.screen.attributes.height / 2),
-               'colour': RED}
 
-right_paddle = {'x': devices.screen.attributes.width -2,
-                'y': math.floor(devices.screen.attributes.height / 2),
-                'colour': BLUE}
+left_paddle = Paddle(1, RED)
+right_paddle = Paddle(devices.screen.attributes.width -2, BLUE)
 
-ball = {'x': 3,
-        'y': math.floor(devices.screen.attributes.height / 2),
-        'colour': GREEN}
+class Ball:
+    def __init__(self, x_start, colour):
+        self.colour = colour
+        self.x = x_start
+        self.y = math.floor(devices.screen.attributes.height / 2)
+
+ball = Ball(3, GREEN)
 
 
 def button_watcher():
     if devices.screen.is_pressed('left_1'):
-        left_paddle['y'] = max(0, left_paddle['y'] - 1)
+        left_paddle.y = max(0, left_paddle.y - 1)
     elif devices.screen.is_pressed('left_4'):
-        left_paddle['y'] = min(devices.screen.attributes.height - paddle_size, left_paddle['y'] + 1)
+        left_paddle.y = min(devices.screen.attributes.height - paddle_size, left_paddle.y + 1)
 
     if devices.screen.is_pressed('right_1'):
-        right_paddle['y'] = max(0, right_paddle['y'] - 1)
+        right_paddle.y = max(0, right_paddle.y - 1)
     elif devices.screen.is_pressed('right_4'):
-        right_paddle['y'] = min(devices.screen.attributes.height - paddle_size, right_paddle['y'] + 1)
+        right_paddle.y = min(devices.screen.attributes.height - paddle_size, right_paddle.y + 1)
+
+
+# class Game(self)
 
 
 while True:
     button_watcher()
 
     devices.screen.clear()
-    devices.screen.rectangle(((left_paddle['x'], left_paddle['y']), (1, paddle_size)), left_paddle['colour'])
+    devices.screen.rectangle(((left_paddle.x, left_paddle.y), (1, paddle_size)), left_paddle.colour)
 
-    devices.screen.rectangle(((right_paddle['x'], right_paddle['y']), (1, paddle_size)), right_paddle['colour'])
-    devices.screen.clear(((int(ball['x']), ball['y']), (1, 1)), ball['colour'])
-    ball['x'] += x_velocity
+    devices.screen.rectangle(((right_paddle.x, right_paddle.y), (1, paddle_size)), right_paddle.colour)
+    devices.screen.clear(((int(ball.x), ball.y), (1, 1)), ball.colour)
+    ball.x += x_velocity
 
-    if ball['x'] == devices.screen.attributes.width - 3 and\
-            (right_paddle['y'] <= ball['y'] <= right_paddle['y'] + paddle_size-1):
+    if ball.x == devices.screen.attributes.width - 3 and\
+            (right_paddle.y <= ball.y <= right_paddle.y + paddle_size-1):
         x_velocity = -x_velocity
-    elif ball['x'] == 2 and (left_paddle['y'] <= ball['y'] <= left_paddle['y'] + paddle_size-1):
+    elif ball.x == 2 and (left_paddle.x <= ball.y <= left_paddle.y + paddle_size-1):
         x_velocity = -x_velocity
 
 
