@@ -36,12 +36,12 @@ ball = Ball(3, GREEN)
 def button_watcher():
     if devices.screen.is_pressed('left_1'):
         left_paddle.y = max(0, left_paddle.y - 1)
-    elif devices.screen.is_pressed('left_4'):
+    elif devices.screen.is_pressed('left_2'):
         left_paddle.y = min(devices.screen.attributes.height - paddle_size, left_paddle.y + 1)
 
     if devices.screen.is_pressed('right_1'):
         right_paddle.y = max(0, right_paddle.y - 1)
-    elif devices.screen.is_pressed('right_4'):
+    elif devices.screen.is_pressed('right_2'):
         right_paddle.y = min(devices.screen.attributes.height - paddle_size, right_paddle.y + 1)
 
 
