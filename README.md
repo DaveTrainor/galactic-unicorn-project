@@ -21,8 +21,12 @@ network = {
     'ssid': '<wifi network name>',
     'password': '<wifi network password>',
 }
-```
 
+locale = {
+    'coordinates': (0.00, 0.00) #replace with lattitude / longitude values (Google maps)
+}`
+
+````
 ## Deploy
 
 ```bash

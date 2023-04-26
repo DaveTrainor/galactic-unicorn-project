@@ -71,9 +71,16 @@ class BaseScreen:
         if bounding is None:
             self.display.clear()
         else:
-            ((x, y), (width, height)) = bounding
-            self.display.rectangle(x, y, width, height)
+            self.rectangle(bounding, colour)
 
+        self.screen.update(self.display)
+        return self
+
+    def rectangle(self, bounding=None, colour=(255,255,255)):
+        self.display.set_pen(self.display.create_pen(*self.colour_correction(colour)))
+
+        ((x, y), (width, height)) = bounding
+        self.display.rectangle(x, y, width, height)
         self.screen.update(self.display)
         return self
 
@@ -85,3 +92,9 @@ class BaseScreen:
 
     def colour_correction(self, colour):
         raise NotImplementedError
+
+    def is_pressed(self, button):
+        try:
+            return self.screen.is_pressed(self.buttons[button])
+        except KeyError:
+            raise Exception(f'Button {button} does not exist on this screen')
