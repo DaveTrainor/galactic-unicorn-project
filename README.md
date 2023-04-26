@@ -24,9 +24,9 @@ network = {
 
 locale = {
     'coordinates': (0.00, 0.00) #replace with lattitude / longitude values (Google maps)
-}`
+}
+```
 
-````
 ## Deploy
 
 ```bash
