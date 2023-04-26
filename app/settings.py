@@ -6,9 +6,12 @@ class NetworkSettings:
     driver: str = None
     ssid: str = None
     password: str = None
+    
 
 class LocaleSettings:
-    coordinates: (float, float) = None
+    coordinates: tuple[float, float] = None
+    
+    
 class Settings:
     screen = ScreenSettings()
     network = NetworkSettings()
