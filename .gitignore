@@ -1,6 +1,6 @@
 *.mpy
 build/
 venv/
-settings.py
+/settings.py
 .pico-up.ini
-
+__pycache__/

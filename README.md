@@ -10,16 +10,25 @@ cd galactic-unicorn-project
 pip install -r requirements.txt
 ```
 
-Make changes to the `settings.py` file depending on your usage.
+Make changes to or create the `settings.py` file depending on your usage.
 
 ```python
 screen = {
-    'driver': 'pico_unicorn'
+    'driver': 'pico_unicorn',
 }
-```
+network = {
+    'driver': 'pico_w',
+    'ssid': '<wifi network name>',
+    'password': '<wifi network password>',
+}
 
+locale = {
+    'coordinates': (0.00, 0.00) #replace with lattitude / longitude values (Google maps)
+}`
+
+````
 ## Deploy
 
 ```bash
-pico-up push build
+pico-up push
 ```

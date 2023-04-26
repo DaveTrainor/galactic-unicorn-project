@@ -1,0 +1,17 @@
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: pip install -r requirements.txt
+      - run: pip install -r requirements.dev.txt
+      - run: |
+          pytest --md-report \
+            --md-report-zeros empty \
+            --md-report-color never \
+            --md-report-output pytest-report.md \
+            tests/
+      - run: |
+          echo "# Test Summary" >> $GITHUB_STEP_SUMMARY 
+          cat pytest-report.md >> $GITHUB_STEP_SUMMARY
