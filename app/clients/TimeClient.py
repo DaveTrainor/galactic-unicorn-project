@@ -1,11 +1,12 @@
 from app.clients.BaseClient import BaseClient
 import re
+import app.settings
 
-
+settings = app.settings.Settings()
 class TimeClient(BaseClient):
     base_url = 'https://worldtimeapi.org/api/timezone/'
 
-    def get_time(self, timezone='Europe/London') -> str:
+    def get_time(self, timezone=settings.locale.timezone) -> str:
         print(f'[client.time] getting time for timezone {timezone}')
         response = self.do_request(timezone)
         full_date_time = response['datetime']

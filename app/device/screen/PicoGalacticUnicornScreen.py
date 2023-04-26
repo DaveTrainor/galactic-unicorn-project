@@ -44,39 +44,39 @@ class PicoGalacticUnicornScreen(BaseScreen):
     def load_page(self, page: Page):
         self.current_page = page
 
-    # def show_text(self, position, text, colour=(100, 100, 100)):
-    #     print(text)
-    #     self.display.set_font('bitmap6')
-    #     self.display.set_pen(self.display.create_pen(*self.colour_correction(colour)))
-    #     self.display.text(text, position[0], position[1], scale=1)
-    #     self.screen.update(self.display)
-    #     return self
-    #
-    # def show_sprite(self):
-    #     self.display.load_spritesheet("app/sprites/pirate.rgb332")
-    #     self.display.update()
-    #     self.display.sprite(4, 0, 0, 0)
-    #     self.screen.update(self.display)
-    #
-    # def show_pixel(self, x, y):
-    #     self.display.set_pen(self.pens.get('WHITE'))
-    #     self.display.pixel(x, y)
-    #     self.screen.update(self.display)
-    #
-    # def show_line(self, x1, y1, x2, y2, colour):
-    #     self.display.set_pen(self.pens.get(colour))
-    #     self.display.line(x1, y1, x2, y2)
-    #     self.screen.update(self.display)
-    #
-    # def show_lines(self, p1, c1, p2, c2, p3, c3):
-    #     self.display.set_pen(self.pens.get(c1))
-    #     self.display.line(p1, 0, p1, 11)
-    #     self.display.set_pen(self.pens.get(c2))
-    #     self.display.line(p2, 0, p2, 11)
-    #     self.display.set_pen(self.pens.get(c3))
-    #     self.display.line(p3, 0, p3, 11)
-    #     self.screen.update(self.display)
-    #
+    def show_text(self, position, text, colour=(100, 100, 100)):
+        print(text)
+        self.display.set_font('bitmap6')
+        self.display.set_pen(self.display.create_pen(*self.colour_correction(colour)))
+        self.display.text(text, position[0], position[1], scale=1)
+        self.screen.update(self.display)
+        return self
+
+    def show_sprite(self):
+        self.display.load_spritesheet("app/sprites/pirate.rgb332")
+        self.display.update()
+        self.display.sprite(4, 0, 0, 0)
+        self.screen.update(self.display)
+
+    def show_pixel(self, x, y):
+        self.display.set_pen(self.pens.get('WHITE'))
+        self.display.pixel(x, y)
+        self.screen.update(self.display)
+
+    def show_line(self, x1, y1, x2, y2, colour):
+        self.display.set_pen(self.pens.get(colour))
+        self.display.line(x1, y1, x2, y2)
+        self.screen.update(self.display)
+
+    def show_lines(self, p1, c1, p2, c2, p3, c3):
+        self.display.set_pen(self.pens.get(c1))
+        self.display.line(p1, 0, p1, 11)
+        self.display.set_pen(self.pens.get(c2))
+        self.display.line(p2, 0, p2, 11)
+        self.display.set_pen(self.pens.get(c3))
+        self.display.line(p3, 0, p3, 11)
+        self.screen.update(self.display)
+
     # def scroll_lines(self, p1, spacing, c1, c2, c3, thickness):
     #     while True:
     #         if p1 >= 53:

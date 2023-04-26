@@ -68,7 +68,7 @@ while True:
     time.sleep(0.1)
 
 
-
+#
 # import uasyncio as asyncio
 #
 # import app.settings
@@ -126,4 +126,4 @@ while True:
 #     asyncio.run(main_loop())
 # except Exception as e:
 #     devices.screen.show_error(e)
-
+#
