@@ -4,3 +4,4 @@ venv/
 /settings.py
 .pico-up.ini
 __pycache__/
+*.pyc
