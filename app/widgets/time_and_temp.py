@@ -47,7 +47,7 @@ class TimeTemp:
 
     async def main_loop(self):
         try:
-            # asyncio.create_task(animate_screen())
+            # asyncio.create_task(self.animate_screen())
             asyncio.create_task(self.show_time())
             await asyncio.sleep(15)
             asyncio.create_task(self.show_weather())

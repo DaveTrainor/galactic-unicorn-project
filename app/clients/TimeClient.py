@@ -3,6 +3,7 @@ import re
 import app.settings
 
 settings = app.settings.Settings()
+
 class TimeClient(BaseClient):
     base_url = 'https://worldtimeapi.org/api/timezone/'
 
