@@ -1,3 +1,2 @@
 pico-up
-numpy==1.24.2
-Pillow==9.5.0
+
