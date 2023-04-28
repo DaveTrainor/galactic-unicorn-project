@@ -23,7 +23,8 @@ network = {
 }
 
 locale = {
-    'coordinates': (0.00, 0.00) #replace with lattitude / longitude values (Google maps)
+    'coordinates': (0.00, 0.00), #replace with lattitude / longitude values (Google maps)
+    'timezone': 'Europe/London', #replace with correct zone from https://worldtimeapi.org/api/timezone/
 }
 ```
 
