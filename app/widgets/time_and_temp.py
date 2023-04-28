@@ -19,7 +19,7 @@ class TimeTemp:
 
     def show_time(self):
         while True:
-            current_time = self.time_client.get_time()
+            current_time = self.time_client.get_time(self.settings.locale)
             time_page = Page([
                 PageSection(PageSectionType.TEXT, (current_time, (255, 255, 255))),
             ])
