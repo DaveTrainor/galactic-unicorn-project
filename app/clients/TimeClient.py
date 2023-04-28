@@ -1,15 +1,15 @@
 from app.clients.BaseClient import BaseClient
 import re
-import app.settings
 
-settings = app.settings.Settings()
+
+
 
 class TimeClient(BaseClient):
     base_url = 'https://worldtimeapi.org/api/timezone/'
 
-    def get_time(self, timezone=settings.locale.timezone) -> str:
-        print(f'[client.time] getting time for timezone {timezone}')
-        response = self.do_request(timezone)
+    def get_time(self, locale) -> str:
+        print(f'[client.time] getting time for timezone {locale.timezone}')
+        response = self.do_request(locale.timezone)
         full_date_time = response['datetime']
         _, current_time, _, _, _ = self.__extract_time_data(full_date_time)
         return current_time
