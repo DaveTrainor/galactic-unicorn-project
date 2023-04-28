@@ -18,7 +18,8 @@ def full_settings():
         'password': 'test_network_password',
     }
     module.locale = {
-        'coordinates': (10.20, 20.50)
+        'coordinates': (10.20, 20.50),
+        'timezone': 'Europe/London'
     }
     sys.modules['settings'] = module
 

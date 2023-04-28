@@ -2,18 +2,20 @@ from app.clients.BaseClient import BaseClient
 import re
 
 
+
+
 class TimeClient(BaseClient):
     base_url = 'https://worldtimeapi.org/api/timezone/'
 
-    def get_time(self, timezone='Europe/London') -> str:
-        print(f'[client.time] getting time for timezone {timezone}')
-        response = self.do_request(timezone)
+    def get_time(self, locale) -> str:
+        print(f'[client.time] getting time for timezone {locale.timezone}')
+        response = self.do_request(locale.timezone)
         full_date_time = response['datetime']
         _, current_time, _, _, _ = self.__extract_time_data(full_date_time)
         return current_time
 
     @staticmethod
-    def __extract_time_data(full_date_time) -> (int, int, int, int, int):
+    def __extract_time_data(full_date_time) -> tuple[int, int, int, int, int]:
         matched_time = re.match(r"^(\d+-\d+-\d+)T(\d+:\d+):(\d+)\.(\d+)([-+]\d+:\d+)$", full_date_time)
         current_date = matched_time.group(1)
         current_time = matched_time.group(2)

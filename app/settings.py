@@ -10,6 +10,7 @@ class NetworkSettings:
 
 class LocaleSettings:
     coordinates: tuple[float, float] = None
+    timezone: str = None
     
     
 class Settings:
@@ -30,6 +31,7 @@ class Settings:
         self.__attempt_load('network', 'ssid')
         self.__attempt_load('network', 'password')
         self.__attempt_load('locale', 'coordinates')
+        self.__attempt_load('locale', 'timezone')
 
     def __attempt_load(self, setting_block, setting_property):
         try:

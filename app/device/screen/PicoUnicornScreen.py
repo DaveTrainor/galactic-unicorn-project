@@ -12,10 +12,10 @@ from ...settings import ScreenSettings
 class PicoUnicornScreen(BaseScreen):
     attributes = ScreenAttributes(sprite_size=7, sprite_extension='bin', width=16, height=7)
     dimness = 10
-    buttons = {'left_1': PicoUnicorn.A,
-               'left_2': PicoUnicorn.B,
-               'right_1': PicoUnicorn.X,
-               'right_2': PicoUnicorn.Y}
+    buttons = {'left_1': PicoUnicorn.BUTTON_A,
+               'left_2': PicoUnicorn.BUTTON_B,
+               'right_1': PicoUnicorn.BUTTON_X,
+               'right_2': PicoUnicorn.BUTTON_Y}
 
 
     def __init__(self, settings: ScreenSettings):
