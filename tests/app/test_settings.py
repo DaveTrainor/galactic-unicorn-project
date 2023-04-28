@@ -24,6 +24,7 @@ def test_full_settings_file(mocker):
     print_mock.assert_any_call('[settings.network.ssid] loaded')
     print_mock.assert_any_call('[settings.network.password] loaded')
     print_mock.assert_any_call('[settings.locale.coordinates] loaded')
+    print_mock.assert_any_call('[settings.locale.timezone] loaded')
 
 
 def test_screen_only_settings_file(mocker):
@@ -36,12 +37,17 @@ def test_screen_only_settings_file(mocker):
     assert None is settings.network.driver
     assert None is settings.network.ssid
     assert None is settings.network.password
+    assert None is settings.locale.coordinates
+    assert None is settings.locale.timezone
 
     print_mock.assert_any_call('[settings] loading device settings')
     print_mock.assert_any_call('[settings.screen.driver] loaded')
     print_mock.assert_any_call('[settings.network.driver] did not find value in settings.py')
     print_mock.assert_any_call('[settings.network.ssid] did not find value in settings.py')
     print_mock.assert_any_call('[settings.network.password] did not find value in settings.py')
+    print_mock.assert_any_call('[settings.locale.coordinates] did not find value in settings.py')
+    print_mock.assert_any_call('[settings.locale.timezone] did not find value in settings.py')
+
 
 
 def test_no_settings_in_file(mocker):
@@ -54,12 +60,16 @@ def test_no_settings_in_file(mocker):
     assert None is settings.network.driver
     assert None is settings.network.ssid
     assert None is settings.network.password
+    assert None is settings.locale.coordinates
+    assert None is settings.locale.timezone
 
     print_mock.assert_any_call('[settings] loading device settings')
     print_mock.assert_any_call('[settings.screen.driver] did not find value in settings.py')
     print_mock.assert_any_call('[settings.network.driver] did not find value in settings.py')
     print_mock.assert_any_call('[settings.network.ssid] did not find value in settings.py')
     print_mock.assert_any_call('[settings.network.password] did not find value in settings.py')
+    print_mock.assert_any_call('[settings.locale.coordinates] did not find value in settings.py')
+    print_mock.assert_any_call('[settings.locale.timezone] did not find value in settings.py')
 
 
 def test_no_settings_file(mocker):
@@ -71,6 +81,8 @@ def test_no_settings_file(mocker):
         assert None is settings.network.driver
         assert None is settings.network.ssid
         assert None is settings.network.password
+        assert None is settings.locale.coordinates
+        assert None is settings.locale.timezone
         assert str(e.value) == 'Cannot load settings, check settings.py'
 
     stop_mock()
