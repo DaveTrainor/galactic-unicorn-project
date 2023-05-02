@@ -17,7 +17,7 @@ class TimeTemp:
         self.time_client = TimeClient()
         asyncio.run(self.main_loop())
 
-    def show_time(self):
+    async def show_time(self):
         while True:
             current_time = self.time_client.get_time(self.settings.locale)
             time_page = Page([
@@ -27,7 +27,7 @@ class TimeTemp:
             self.devices.screen.show_page(time_page)
             await asyncio.sleep(30)
 
-    def show_weather(self):
+    async def show_weather(self):
         while True:
             current_temp, temp_colour = self.weather_client.get_temperature(self.settings.locale.coordinates)
             time_page = Page([
