@@ -9,13 +9,14 @@ from app.page.PageSection import PageSection, PageSectionType
 
 
 class TimeTemp:
-
+    display_name = 'Time/Temp'
+    slow_load = False
     def __init__(self, devices, settings):
         self.settings = settings
         self.devices = devices
         self.weather_client = WeatherForecastClient()
         self.time_client = TimeClient()
-        asyncio.run(self.main_loop())
+
 
     async def show_time(self):
         while True:
@@ -37,13 +38,11 @@ class TimeTemp:
             self.devices.screen.show_page(time_page)
             await asyncio.sleep(30)
 
-
     def animate_screen(self):
         while True:
             self.devices.screen.clear()
             self.devices.screen.next_frame()
             await asyncio.sleep(0.1)
-
 
     async def main_loop(self):
         try:
@@ -56,5 +55,5 @@ class TimeTemp:
         except Exception as e:
             self.devices.screen.show_error(e)
 
-
-
+    def start(self):
+        asyncio.run(self.main_loop())

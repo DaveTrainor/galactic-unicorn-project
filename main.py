@@ -11,11 +11,19 @@ devices = setup_devices()
 settings = app.settings.Settings()
 
 
-
+class LoadingScreen:
+    def __init__(self, devices):
+        devices.screen.clear()
+        self.page = Page([
+            PageSection(PageSectionType.TEXT, ('Loading...', (180, 0, 160))),
+    ])
+        devices.screen.show_page(self.page)
 class MainMenu:
     def __init__(self):
-        self.left_button_message = 'A: Pong'
-        self.right_button_message = 'B: Time / Temp'
+        self.action_button_A = pong.PongGame
+        self.action_button_B = time_and_temp.TimeTemp
+        self.left_button_message = f'A: {self.action_button_A.display_name}'
+        self.right_button_message = f'B: {self.action_button_B.display_name}'
         self.left_button_page = Page([
             PageSection(PageSectionType.TEXT, (self.left_button_message, (0, 255, 0))),
         ])
@@ -30,16 +38,15 @@ class MainMenu:
         while self.keep_running:
             if devices.screen.is_pressed('left_1'):
                 self.keep_running = False
-                pong.play_pong(devices, settings)
+                loading_screen = LoadingScreen(devices)
+                new_action = self.action_button_A(devices, settings)
+                new_action.start()
 
             elif devices.screen.is_pressed('left_2'):
                 self.keep_running = False
-                devices.screen.clear()
-                self.time_text_loading_page = Page([
-                    PageSection(PageSectionType.TEXT, ('Loading...', (0, 255, 0))),
-                ])
-                devices.screen.show_page(self.time_text_loading_page)
-                time_and_temp.TimeTemp(devices, settings)
+                loading_screen = LoadingScreen(devices)
+                new_action = self.action_button_B(devices, settings)
+                new_action.start()
             await asyncio.sleep(0.1)
 
     async def show_menu(self):
