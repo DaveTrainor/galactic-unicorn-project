@@ -36,7 +36,10 @@ class MainMenu:
     async def button_watcher(self):
         print('button watcher started')
         while self.keep_running:
+            print(f'Keep running: {self.keep_running}')
+            print(asyncio.get_event_loop())
             if devices.screen.is_pressed('left_1'):
+                asyncio.Loop.stop()
                 self.keep_running = False
                 loading_screen = LoadingScreen(devices)
                 new_action = self.action_button_A(devices, settings)
@@ -44,6 +47,7 @@ class MainMenu:
 
             elif devices.screen.is_pressed('left_2'):
                 self.keep_running = False
+                print(f'Keep running: {self.keep_running}')
                 loading_screen = LoadingScreen(devices)
                 new_action = self.action_button_B(devices, settings)
                 new_action.start()
@@ -51,12 +55,14 @@ class MainMenu:
 
     async def show_menu(self):
         while self.keep_running:
-            devices.screen.clear()
-            devices.screen.show_page(self.left_button_page)
-            await asyncio.sleep(2)
-            devices.screen.clear()
-            devices.screen.show_page(self.right_button_page)
-            await asyncio.sleep(2)
+            if self.keep_running:
+                devices.screen.clear()
+                devices.screen.show_page(self.left_button_page)
+                await asyncio.sleep(2)
+            if self.keep_running:
+                devices.screen.clear()
+                devices.screen.show_page(self.right_button_page)
+                await asyncio.sleep(2)
 
     async def main_loop(self):
         print('Main loop started')

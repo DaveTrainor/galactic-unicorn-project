@@ -31,11 +31,11 @@ class TimeTemp:
     async def show_weather(self):
         while True:
             current_temp, temp_colour = self.weather_client.get_temperature(self.settings.locale.coordinates)
-            time_page = Page([
+            weather_page = Page([
                 PageSection(PageSectionType.TEXT, (current_temp, temp_colour)),
             ])
             self.devices.screen.clear()
-            self.devices.screen.show_page(time_page)
+            self.devices.screen.show_page(weather_page)
             await asyncio.sleep(30)
 
     def animate_screen(self):
