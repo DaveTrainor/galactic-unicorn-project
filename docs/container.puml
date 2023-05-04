@@ -1,0 +1,34 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+HIDE_STEREOTYPE()
+
+Person(p_user, "User")
+Person(p_developer, "Developer")
+
+System_Ext(s_api, "Data Resource", "An external API for use by other systems or applications")
+
+Boundary(device, "Device") {
+    Container(c_buttons, "Buttons", "Hardware")
+    Container(c_application, "Application", "Software")
+    Container(c_pico_board, "Pico Board", "Hardware")
+    Container(c_network_card, "Network Card", "Hardware")
+    Container(c_screen_display, "Screen Display", "Hardware")
+}
+
+Rel_L(p_user, c_buttons, "Presses buttons to interact with application")
+Rel(p_user, c_screen_display, "Observes output")
+Rel(p_developer, c_application, "Writes the code")
+Rel(c_buttons, c_application, "Sends user input to application")
+Rel(c_application, c_pico_board, "Runs on Pico Board")
+Rel(c_pico_board, c_network_card, "Communicates with network card")
+Rel(c_pico_board, c_buttons, "Receives input from buttons")
+Rel(c_pico_board, c_screen_display, "Sends output to screen")
+Rel(c_application, c_network_card, "Uses network card to access data resources")
+Rel(c_network_card, s_api, "Sends requests to data resource")
+Rel(s_api, c_network_card, "Returns requested data")
+Rel(c_application, c_screen_display, "Displays information on screen")
+
+@enduml
+
+
