@@ -22,13 +22,13 @@ class MainMenu:
     def __init__(self):
         self.action_button_A = pong.PongGame
         self.action_button_B = time_and_temp.TimeTemp
-        self.left_button_message = f'A: {self.action_button_A.display_name}'
-        self.right_button_message = f'B: {self.action_button_B.display_name}'
-        self.left_button_page = Page([
-            PageSection(PageSectionType.TEXT, (self.left_button_message, (0, 255, 0))),
+        self.button_A_message = f'A: {self.action_button_A.display_name}'
+        self.button_B_message = f'B: {self.action_button_B.display_name}'
+        self.button_A_page = Page([
+            PageSection(PageSectionType.TEXT, (self.button_A_message, (0, 255, 0))),
         ])
-        self.right_button_page = Page([
-            PageSection(PageSectionType.TEXT, (self.right_button_message, (0, 0, 255))),
+        self.button_B_page = Page([
+            PageSection(PageSectionType.TEXT, (self.button_B_message, (0, 0, 255))),
         ])
         self.keep_running = True
         asyncio.run(self.main_loop())
@@ -39,7 +39,6 @@ class MainMenu:
             print(f'Keep running: {self.keep_running}')
             print(asyncio.get_event_loop())
             if devices.screen.is_pressed('left_1'):
-                asyncio.Loop.stop()
                 self.keep_running = False
                 loading_screen = LoadingScreen(devices)
                 new_action = self.action_button_A(devices, settings)
@@ -57,11 +56,11 @@ class MainMenu:
         while self.keep_running:
             if self.keep_running:
                 devices.screen.clear()
-                devices.screen.show_page(self.left_button_page)
+                devices.screen.show_page(self.button_A_page)
                 await asyncio.sleep(2)
             if self.keep_running:
                 devices.screen.clear()
-                devices.screen.show_page(self.right_button_page)
+                devices.screen.show_page(self.button_B_page)
                 await asyncio.sleep(2)
 
     async def main_loop(self):
