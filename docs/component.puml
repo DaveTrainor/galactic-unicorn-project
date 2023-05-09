@@ -1,5 +1,4 @@
 @startuml
-
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 HIDE_STEREOTYPE()
@@ -24,12 +23,19 @@ Container(c_application, "Application", "Software") {
     }
 }
 
-Rel_L(p_user, c_application, "Interacts with application")
-Rel_L(p_user, settings, "User inputs settings")
+Rel(p_user, c_application, "Interacts with application")
+Rel(p_user, settings, "User inputs settings")
 Rel(p_developer, c_application, "Writes the code")
 Rel(clients, s_api, "Sends requests to data resource")
 Rel(s_api, clients, "Returns requested data")
 Rel(network, screen_interface, "Imports screen settings from settings.py")
 Rel(screen_interface, p_user, "Displays information on screen")
+Rel(sprites, screen_interface, "Displays on screen")
+Rel(widgets, screen_interface, "Displays on screen")
+Rel(game, screen_interface, "Displays on screen")
+Rel(clients, widgets, "Provides data to widgets")
+Rel(pico_unicorn_settings, settings, "Inherits settings from Settings component")
+Rel(galactic_unicorn_settings, settings, "Inherits settings from Settings component")
+Rel(network, settings, "Inherits settings from Settings component")
 
 @enduml
