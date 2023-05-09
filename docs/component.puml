@@ -1,0 +1,35 @@
+@startuml
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+HIDE_STEREOTYPE()
+
+Person(p_user, "User")
+Person(p_developer, "Developer")
+
+System_Ext(s_api, "Data Resource", "An external API for use by other systems or applications")
+
+Container(c_application, "Application", "Software") {
+    Component(clients, "Clients", "Makes requests to external APIs and gathers data")
+    Component(game, "Game", "Contains code to play a game")
+    Component(sprites, "Sprites", "")
+    Component(widgets, "Widgets", "")
+
+    Boundary(device, "Device") {
+        Component(settings, "Settings", "Settings input by user")
+        Component(network, "Network", "Contains files that configure network settings")
+        Component(screen_interface, "Screen Interface", "Creates a screen interface for a Pico Unicorn device")
+        Component(galactic_unicorn_settings, "Galactic Unicorn Settings", "")
+        Component(pico_unicorn_settings, "Pico Unicorn Settings", "")
+    }
+}
+
+Rel_L(p_user, c_application, "Interacts with application")
+Rel_L(p_user, settings, "User inputs settings")
+Rel(p_developer, c_application, "Writes the code")
+Rel(clients, s_api, "Sends requests to data resource")
+Rel(s_api, clients, "Returns requested data")
+Rel(network, screen_interface, "Imports screen settings from settings.py")
+Rel(screen_interface, p_user, "Displays information on screen")
+
+@enduml
