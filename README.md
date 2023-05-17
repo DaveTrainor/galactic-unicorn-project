@@ -4,6 +4,9 @@ A project to display useful information on Pico display boards.
 
 ## Installation
 
+Install the non-screen specific version of the pico-w [micropython firmware](pimoroni-picow-v1.20.2-micropython.uf2).
+
+Clone the repo:
 ```bash
 git clone https://github.com/DaveTrainor/galactic-unicorn-project.git
 cd galactic-unicorn-project
@@ -15,6 +18,7 @@ Make changes to or create the `settings.py` file depending on your usage.
 ```python
 screen = {
     'driver': 'pico_unicorn',
+    # 'driver': ''galactic_unicorn'
 }
 network = {
     'driver': 'pico_w',
