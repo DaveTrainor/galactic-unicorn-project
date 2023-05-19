@@ -2,8 +2,6 @@ from app.clients.BaseClient import BaseClient
 import re
 
 
-
-
 class TimeClient(BaseClient):
     base_url = 'https://worldtimeapi.org/api/timezone/'
 
@@ -15,7 +13,7 @@ class TimeClient(BaseClient):
         return current_time
 
     @staticmethod
-    def __extract_time_data(full_date_time) -> tuple[int, int, int, int, int]:
+    def __extract_time_data(full_date_time) -> tuple[str, str, int, int, int]:
         matched_time = re.match(r"^(\d+-\d+-\d+)T(\d+:\d+):(\d+)\.(\d+)([-+]\d+:\d+)$", full_date_time)
         current_date = matched_time.group(1)
         current_time = matched_time.group(2)
