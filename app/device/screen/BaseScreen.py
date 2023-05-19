@@ -18,7 +18,7 @@ class BaseScreen:
     current_page = None
 
     def __init__(self, settings: ScreenSettings):
-        pass
+        self.buttons = {}
 
     def get_sprite_sheet_filename(self, name):
         return f'app/sprites/{name}.{self.attributes.sprite_extension}'
@@ -99,3 +99,12 @@ class BaseScreen:
             return self.screen.is_pressed(self.buttons[button])
         except KeyError:
             raise Exception(f'Button {button} does not exist on this screen')
+
+    def get_buttons(self):
+        screen_buttons = self.buttons
+        input_buttons = {}
+
+        for button in screen_buttons:
+            input_buttons[button] = self.is_pressed(button)
+
+        return input_buttons
