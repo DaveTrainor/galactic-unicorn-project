@@ -60,9 +60,9 @@ class BaseScreen:
                 section_width, _ = self.get_section_bounds(section)
 
                 if offset + section_width > self.attributes.width:
-                    if section_width - section.animation_frame < 0:
+                    if section_width - section.animation_frame + section_width < 0:
                         section.animation_frame = 0
-                    self.show_page_section(section, offset - section.animation_frame)
+                    self.show_page_section(section, offset - section.animation_frame + section_width)
                     section.animation_frame += 1
                 offset += section_width
 
