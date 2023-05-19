@@ -42,6 +42,7 @@ class BaseScreen:
             offset += section_width + 1
 
     def show_page_section(self, section: PageSection, offset=0):
+        self.clear(colour=section.page.background)
         if section.type == PageSectionType.TEXT:
             text, colour = section.contents
             self.show_text((offset, 0), text, colour)
