@@ -39,7 +39,7 @@ pico-up push
 ```
 ## Debug
 
-run `mpremote devs` to get your device address. E.g. `/dev/cu.usbmodem2101`
-`mpremote connect [put address here]`  then `ctrl D` to see outputs in the terminal
-`ctrl ]` to exit
+* run `mpremote devs` to get your device address. E.g. `/dev/cu.usbmodem2101`
+* `mpremote connect [put address here]`  then `ctrl D` to see outputs in the terminal
+* `ctrl ]` to exit
 
