@@ -3,32 +3,45 @@ import app.settings
 import time
 import math
 
-
+#16*7
 
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
+# debounce reset button
+# resetDebounce = 8
 
 class Paddle:
     def __init__(self, devices, settings, x_start, colour):
-        if settings.screen.driver == 'pico_unicorn':
-            self.size = 2
-        else:
-            self.size = 3
+        # Proper Pong has angled paddles must be three wide
+        self.size = 3
+        # if settings.screen.driver == 'pico_unicorn':
+        #     self.size = 2
+        # else:
+        #     self.size = 3
+
         self.x = int(x_start)
         self.y = math.floor((devices.screen.attributes.height - self.size) / 2)
         self.colour = colour
+        self.startY = self.y
+        self.startX = self.x
 
+    def resetPaddle(self):
+        self.x = self.startX
+        self.y = self.startY
 
 class Ball:
     def __init__(self, devices, x_start, colour):
         self.colour = colour
-        self.x = x_start
+        self.x = int(x_start)
         self.y = math.floor(devices.screen.attributes.height / 2)
+        self.startY = self.y
+        self.startX = self.x
 
-
-
+    def resetBall(self):
+        self.x = self.startX
+        self.y = self.startY
 
 class PongGame:
     display_name = 'Pong'
@@ -39,34 +52,68 @@ class PongGame:
         self.x_velocity = 1.0
         self.left_paddle = Paddle(devices, settings, 1, RED)
         self.right_paddle = Paddle(devices, settings, devices.screen.attributes.width - 2, BLUE)
-        self.ball = Ball(devices, 3, GREEN)
+        self.ball = Ball(devices, devices.screen.attributes.width/2, GREEN)
 
-    def button_watcher(self, devices, left_paddle, right_paddle):
+    def doReset(self):
+        self.devices.screen.clear(((int(self.ball.x), self.ball.y), (1, 1)), self.ball.colour)
+        self.ball.resetBall()
+        self.left_paddle.resetPaddle()
+        self.right_paddle.resetPaddle()
+
+                # 0................
+                # 1.|............|.
+                # 2.|............|.
+                # 3................
+                # 4................
+                # 5................
+                # 6................
+
+    def ballIsAtHeightOfPaddle(self, paddle, ball):
+        return (ball.y >= paddle.y) and (ball.y <= paddle.y + (paddle.size - 1))
+
+    def button_watcher(self, devices):
+        if devices.screen.is_pressed('left_1') and devices.screen.is_pressed('right_1'):
+            self.doReset()
+
         if devices.screen.is_pressed('left_1'):
             self.left_paddle.y = max(0, self.left_paddle.y - 1)
         elif devices.screen.is_pressed('left_2'):
             self.left_paddle.y = min(devices.screen.attributes.height - self.left_paddle.size, self.left_paddle.y + 1)
 
         if devices.screen.is_pressed('right_1'):
-            self.right_paddle.y = max(0, right_paddle.y - 1)
+            self.right_paddle.y = max(0, self.right_paddle.y - 1)
         elif devices.screen.is_pressed('right_2'):
             self.right_paddle.y = min(devices.screen.attributes.height - self.right_paddle.size, self.right_paddle.y + 1)
 
     def start(self):
         while True:
-            self.button_watcher(self.devices, self.left_paddle, self.right_paddle)
+            print(f'AX:{self.left_paddle.x} AY:{self.left_paddle.y}')
+            print(f'BX:{self.right_paddle.x} BY:{self.right_paddle.y}')
+            print(f'BallX:{self.ball.x} BallY:{self.ball.y}')
+
+            self.button_watcher(self.devices)
 
             self.devices.screen.clear()
             self.devices.screen.rectangle(((self.left_paddle.x, self.left_paddle.y), (1, self.left_paddle.size)), self.left_paddle.colour)
-
             self.devices.screen.rectangle(((self.right_paddle.x, self.right_paddle.y), (1, self.right_paddle.size)), self.right_paddle.colour)
-            self.devices.screen.clear(((int(self.ball.x), self.ball.y), (1, 1)), self.ball.colour)
+
+            self.devices.screen.rectangle(((int(self.ball.x), self.ball.y), (1, 1)), self.ball.colour)
             self.ball.x += self.x_velocity
 
             if self.ball.x == self.devices.screen.attributes.width - 3 and\
-                    (self.right_paddle.y <= self.ball.y <= self.right_paddle.y + self.right_paddle.size-1):
+                self.ballIsAtHeightOfPaddle(self.right_paddle, self.ball):
                 self.x_velocity = -self.x_velocity
-            elif self.ball.x == 2 and (self.left_paddle.x <= self.ball.y <= self.left_paddle.y + self.left_paddle.size-1):
+
+            if self.ball.x == 2 and\
+                self.ballIsAtHeightOfPaddle(self.left_paddle, self.ball):
                 self.x_velocity = -self.x_velocity
+
+            #Someone has scored
+            if (self.ball.x > (self.devices.screen.attributes.width - 1)):
+                print("Left player has won!")
+                self.doReset()
+            elif(self.ball.x < 1):
+                print("Right players has won!")
+                self.doReset()
 
             time.sleep(0.1)
