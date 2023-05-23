@@ -13,6 +13,8 @@ class TaskManager:
     input_fps = 15
     render_fps = 60
     state_fps = 60
+    switch_counter = 0
+    switch_debounce = 0.2
 
     def __new__(cls, asyncio, devices: Devices, settings: Settings, tasks: list[BaseTask]):
         if cls._instance is None:
@@ -41,16 +43,21 @@ class TaskManager:
                 buttons = self.devices.screen.get_buttons()
 
                 if buttons['right_2']:
-                    if len(self.tasks) == self.current_task + 1:
-                        self.set_current_task(0)
-                    else:
-                        self.set_current_task(self.current_task + 1)
+                    self.switch_counter += 1
+                    if self.switch_counter > 1.0 / self.switch_debounce:
+                        self.switch_counter = 0
+                        if len(self.tasks) == self.current_task + 1:
+                            self.set_current_task(0)
+                        else:
+                            self.set_current_task(self.current_task + 1)
+                else:
+                    self.switch_counter = 0
 
                 self.get_current_task().input(buttons)
 
                 # If input received, hold for 200ms
                 if any(buttons.values()):
-                    await self.asyncio.sleep(0.2)
+                    await self.asyncio.sleep(self.switch_debounce)
 
             except Exception as e:
                 self.devices.screen.show_error(e)
