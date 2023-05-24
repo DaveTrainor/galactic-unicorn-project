@@ -49,27 +49,42 @@ class PongGame:
 
     def __init__(self, devices, settings):
         self.devices = devices
-        self.x_velocity = 1.0
+        self.x_velocity = 1
+        self.y_velocity = 0
         self.left_paddle = Paddle(devices, settings, 1, RED)
         self.right_paddle = Paddle(devices, settings, devices.screen.attributes.width - 2, BLUE)
         self.ball = Ball(devices, devices.screen.attributes.width/2, GREEN)
 
     def doReset(self):
-        self.devices.screen.clear(((int(self.ball.x), self.ball.y), (1, 1)), self.ball.colour)
         self.ball.resetBall()
         self.left_paddle.resetPaddle()
         self.right_paddle.resetPaddle()
 
-                # 0................
-                # 1.|............|.
-                # 2.|............|.
-                # 3................
-                # 4................
-                # 5................
-                # 6................
+        self.x_velocity = 1
+        self.y_velocity = 0
+
+        time.sleep(1)
+
+        #   0123456789ABCDEF
+        # 0 ****************
+        # 1 *|************|*
+        # 2 *|***********X|*
+        # 3 *|************|*
+        # 4 ****************
+        # 5 ****************
+        # 6 ****************
 
     def ballIsAtHeightOfPaddle(self, paddle, ball):
         return (ball.y >= paddle.y) and (ball.y <= paddle.y + (paddle.size - 1))
+
+    def ballIsCentreOfPaddle(self, paddle, ball):
+        return ball.y == paddle.y+1
+
+    def ballIsUpperEdgeOfPaddle(self, paddle, ball):
+        return ball.y == paddle.y
+
+    def ballIsLowerEdgeOfPaddle(self, paddle, ball):
+        return ball.y == (paddle.y + 2 )
 
     def button_watcher(self, devices):
         if devices.screen.is_pressed('left_1') and devices.screen.is_pressed('right_1'):
@@ -99,14 +114,30 @@ class PongGame:
 
             self.devices.screen.rectangle(((int(self.ball.x), self.ball.y), (1, 1)), self.ball.colour)
             self.ball.x += self.x_velocity
+            self.ball.y += self.y_velocity
 
-            if self.ball.x == self.devices.screen.attributes.width - 3 and\
-                self.ballIsAtHeightOfPaddle(self.right_paddle, self.ball):
-                self.x_velocity = -self.x_velocity
+            # if ball reaches just before paddle, bounce
+            if self.ball.x == self.devices.screen.attributes.width - 3: # right of screen
+                if self.ballIsCentreOfPaddle(self.right_paddle, self.ball):
+                    self.x_velocity = -self.x_velocity
+                elif self.ballIsLowerEdgeOfPaddle(self.right_paddle, self.ball):
+                    self.x_velocity = -self.x_velocity
+                    self.y_velocity += 1
+                elif self.ballIsUpperEdgeOfPaddle(self.right_paddle, self.ball):
+                    self.x_velocity = -self.x_velocity
+                    self.y_velocity -= 1
+            elif self.ball.x == 2: # left of screen
+                if self.ballIsCentreOfPaddle(self.left_paddle, self.ball):
+                    self.x_velocity = -self.x_velocity
+                elif self.ballIsLowerEdgeOfPaddle(self.left_paddle, self.ball):
+                    self.x_velocity = -self.x_velocity
+                    self.y_velocity += 1
+                elif self.ballIsUpperEdgeOfPaddle(self.left_paddle, self.ball):
+                    self.x_velocity = -self.x_velocity
+                    self.y_velocity -= 1
 
-            if self.ball.x == 2 and\
-                self.ballIsAtHeightOfPaddle(self.left_paddle, self.ball):
-                self.x_velocity = -self.x_velocity
+            if self.ball.y == 0 or self.ball.y == (self.devices.screen.attributes.height - 1):
+                self.y_velocity = -self.y_velocity
 
             #Someone has scored
             if (self.ball.x > (self.devices.screen.attributes.width - 1)):
