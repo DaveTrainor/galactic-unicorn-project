@@ -12,11 +12,6 @@ from ...settings import ScreenSettings
 class PicoUnicornScreen(BaseScreen):
     attributes = ScreenAttributes(sprite_size=7, sprite_extension='bin', width=16, height=7)
     dimness = 10
-    buttons = {'left_1': PicoUnicorn.BUTTON_A,
-               'left_2': PicoUnicorn.BUTTON_B,
-               'right_1': PicoUnicorn.BUTTON_X,
-               'right_2': PicoUnicorn.BUTTON_Y}
-
 
     def __init__(self, settings: ScreenSettings):
         super().__init__(settings)
@@ -25,6 +20,12 @@ class PicoUnicornScreen(BaseScreen):
         self.screen = PicoUnicorn()
         self.display = PicoGraphics(display=DISPLAY_UNICORN_PACK, pen_type=PEN_RGB888)
         self.display.set_font('bitmap6')
+        self.buttons = {
+            'left_1': PicoUnicorn.BUTTON_A,
+            'left_2': PicoUnicorn.BUTTON_B,
+            'right_1': PicoUnicorn.BUTTON_X,
+            'right_2': PicoUnicorn.BUTTON_Y,
+        }
 
     def load_page(self, page: Page):
         sprites = {}
