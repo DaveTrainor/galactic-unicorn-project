@@ -74,17 +74,14 @@ class PongGame:
         # 5 ****************
         # 6 ****************
 
-    def ballIsAtHeightOfPaddle(self, paddle, ball):
-        return (ball.y >= paddle.y) and (ball.y <= paddle.y + (paddle.size - 1))
-
     def ballIsCentreOfPaddle(self, paddle, ball):
-        return ball.y == paddle.y+1-self.y_velocity
+        return ball.y == paddle.y+1
 
     def ballIsUpperEdgeOfPaddle(self, paddle, ball):
-        return ball.y == paddle.y-self.y_velocity
+        return ball.y == paddle.y
 
     def ballIsLowerEdgeOfPaddle(self, paddle, ball):
-        return ball.y == (paddle.y + 2 )-self.y_velocity
+        return ball.y == (paddle.y + 2 )
 
     def button_watcher(self, devices):
         if devices.screen.is_pressed('left_1') and devices.screen.is_pressed('right_1'):
@@ -102,8 +99,8 @@ class PongGame:
 
     def start(self):
         while True:
-            print(f'AX:{self.left_paddle.x} AY:{self.left_paddle.y}')
-            print(f'BX:{self.right_paddle.x} BY:{self.right_paddle.y}')
+            print(f'LX:{self.left_paddle.x} LY:{self.left_paddle.y}')
+            print(f'RX:{self.right_paddle.x} RY:{self.right_paddle.y}')
             print(f'BallX:{self.ball.x} BallY:{self.ball.y}')
 
             self.button_watcher(self.devices)
@@ -136,7 +133,7 @@ class PongGame:
                     self.x_velocity = -self.x_velocity
                     self.y_velocity -= 1
 
-            if self.ball.y == 0 or self.ball.y == (self.devices.screen.attributes.height - 1):
+            if self.ball.y <= 0 or self.ball.y >= (self.devices.screen.attributes.height - 1):
                 self.y_velocity = -self.y_velocity
 
             #Someone has scored
