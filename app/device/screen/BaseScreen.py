@@ -18,7 +18,7 @@ class BaseScreen:
     current_page = None
 
     def __init__(self, settings: ScreenSettings):
-        pass
+        self.buttons = {}
 
     def get_sprite_sheet_filename(self, name):
         return f'app/sprites/{name}.{self.attributes.sprite_extension}'
@@ -42,6 +42,7 @@ class BaseScreen:
             offset += section_width + 1
 
     def show_page_section(self, section: PageSection, offset=0):
+        self.clear(colour=section.page.background)
         if section.type == PageSectionType.TEXT:
             text, colour = section.contents
             self.show_text((offset, 0), text, colour)
@@ -59,9 +60,9 @@ class BaseScreen:
                 section_width, _ = self.get_section_bounds(section)
 
                 if offset + section_width > self.attributes.width:
-                    if section_width - section.animation_frame < 0:
+                    if section_width - section.animation_frame + section_width < 0:
                         section.animation_frame = 0
-                    self.show_page_section(section, offset - section.animation_frame)
+                    self.show_page_section(section, offset - section.animation_frame + section_width)
                     section.animation_frame += 1
                 offset += section_width
 
@@ -98,3 +99,12 @@ class BaseScreen:
             return self.screen.is_pressed(self.buttons[button])
         except KeyError:
             raise Exception(f'Button {button} does not exist on this screen')
+
+    def get_buttons(self):
+        screen_buttons = self.buttons
+        input_buttons = {}
+
+        for button in screen_buttons:
+            input_buttons[button] = self.is_pressed(button)
+
+        return input_buttons

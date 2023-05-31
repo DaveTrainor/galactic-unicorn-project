@@ -1,73 +1,18 @@
-import time
 import app.settings
+from app.TaskManager import start_manager
 from app.device import setup_devices
-from app.game import pong
-from app.widgets import time_and_temp
-from app.page.Page import Page
-from app.page.PageSection import PageSection, PageSectionType
 import uasyncio as asyncio
+
+from app.tasks.ColourTask import ColourTask
+from app.tasks.TimeScrollerTask import TimeScrollerTask
 
 devices = setup_devices()
 settings = app.settings.Settings()
 
-
-class LoadingScreen:
-    def __init__(self, devices):
-        devices.screen.clear()
-        self.page = Page([
-            PageSection(PageSectionType.TEXT, ('Loading...', (180, 0, 160))),
-    ])
-        devices.screen.show_page(self.page)
-class MainMenu:
-    def __init__(self):
-        self.action_button_A = pong.PongGame
-        self.action_button_B = time_and_temp.TimeTemp
-        self.button_A_message = f'A: {self.action_button_A.display_name}'
-        self.button_B_message = f'B: {self.action_button_B.display_name}'
-        self.button_A_page = Page([
-            PageSection(PageSectionType.TEXT, (self.button_A_message, (0, 255, 0))),
-        ])
-        self.button_B_page = Page([
-            PageSection(PageSectionType.TEXT, (self.button_B_message, (0, 0, 255))),
-        ])
-        self.keep_running = True
-        asyncio.run(self.main_loop())
-
-    async def button_watcher(self):
-        print('button watcher started')
-        while self.keep_running:
-            print(f'Keep running: {self.keep_running}')
-            print(asyncio.get_event_loop())
-            if devices.screen.is_pressed('left_1'):
-                self.keep_running = False
-                loading_screen = LoadingScreen(devices)
-                new_action = self.action_button_A(devices, settings)
-                new_action.start()
-
-            elif devices.screen.is_pressed('left_2'):
-                self.keep_running = False
-                print(f'Keep running: {self.keep_running}')
-                loading_screen = LoadingScreen(devices)
-                new_action = self.action_button_B(devices, settings)
-                new_action.start()
-            await asyncio.sleep(0.1)
-
-    async def show_menu(self):
-        while self.keep_running:
-            if self.keep_running:
-                devices.screen.clear()
-                devices.screen.show_page(self.button_A_page)
-                await asyncio.sleep(2)
-            if self.keep_running:
-                devices.screen.clear()
-                devices.screen.show_page(self.button_B_page)
-                await asyncio.sleep(2)
-
-    async def main_loop(self):
-        print('Main loop started')
-        asyncio.create_task(self.show_menu())
-        await asyncio.create_task(self.button_watcher())
-
-
-MainMenu()
-
+start_manager(asyncio,
+              tasks=[
+                  ColourTask(settings),
+                  TimeScrollerTask(settings),
+              ],
+              devices=devices,
+              settings=settings)

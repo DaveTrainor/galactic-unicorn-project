@@ -1,0 +1,18 @@
+@startuml
+skinparam backgroundColor transparent
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+HIDE_STEREOTYPE()
+
+Person(p_user, "User")
+Person(p_developer, "Developer")
+
+System(s_pico, "Pico Device", "A microcontroller with an LED screen that can run various applications and interact with external data resources.")
+System_Ext(s_api, "Data Resource", "An external API for use by other systems or applications")
+
+Rel(p_user, s_pico, "Interacts with")
+Rel(p_developer, s_pico, "Pushes code to the device")
+Rel(s_pico, s_api, "Returns requested data")
+@enduml
+
+
