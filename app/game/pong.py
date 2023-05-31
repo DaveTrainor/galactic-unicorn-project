@@ -51,6 +51,7 @@ class PongGame:
         self.devices = devices
         self.x_velocity = 1
         self.y_velocity = 0
+        self.bounce_angle = 0.5
         self.left_paddle = Paddle(devices, settings, 1, RED)
         self.right_paddle = Paddle(devices, settings, devices.screen.attributes.width - 2, BLUE)
         self.ball = Ball(devices, devices.screen.attributes.width/2, GREEN)
@@ -99,9 +100,9 @@ class PongGame:
 
     def start(self):
         while True:
-            print(f'LX:{self.left_paddle.x} LY:{self.left_paddle.y}')
-            print(f'RX:{self.right_paddle.x} RY:{self.right_paddle.y}')
-            print(f'BallX:{self.ball.x} BallY:{self.ball.y}')
+            # print(f'AX:{self.left_paddle.x} AY:{self.left_paddle.y}')
+            # print(f'BX:{self.right_paddle.x} BY:{self.right_paddle.y}')
+            # print(f'BallX:{self.ball.x} BallY:{self.ball.y}')
 
             self.button_watcher(self.devices)
 
@@ -109,29 +110,37 @@ class PongGame:
             self.devices.screen.rectangle(((self.left_paddle.x, self.left_paddle.y), (1, self.left_paddle.size)), self.left_paddle.colour)
             self.devices.screen.rectangle(((self.right_paddle.x, self.right_paddle.y), (1, self.right_paddle.size)), self.right_paddle.colour)
 
-            self.devices.screen.rectangle(((int(self.ball.x), self.ball.y), (1, 1)), self.ball.colour)
+            self.devices.screen.rectangle(((int(self.ball.x), int(math.floor(self.ball.y))), (1, 1)), self.ball.colour)
             self.ball.x += self.x_velocity
             self.ball.y += self.y_velocity
 
             # if ball reaches just before paddle, bounce
             if self.ball.x == self.devices.screen.attributes.width - 2: # right of screen
+
+                print(f'BX:{self.right_paddle.x} BY:{self.right_paddle.y}')
+                print(f'BallX:{self.ball.x} BallY:{self.ball.y}')
+
                 if self.ballIsCentreOfPaddle(self.right_paddle, self.ball):
                     self.x_velocity = -self.x_velocity
                 elif self.ballIsLowerEdgeOfPaddle(self.right_paddle, self.ball):
                     self.x_velocity = -self.x_velocity
-                    self.y_velocity += 1
+                    self.y_velocity += self.bounce_angle
                 elif self.ballIsUpperEdgeOfPaddle(self.right_paddle, self.ball):
                     self.x_velocity = -self.x_velocity
-                    self.y_velocity -= 1
+                    self.y_velocity -= self.bounce_angle
+
             elif self.ball.x == 1: # left of screen
+                print(f'AX:{self.left_paddle.x} AY:{self.left_paddle.y}')
+                print(f'BallX:{self.ball.x} BallY:{self.ball.y}')
+
                 if self.ballIsCentreOfPaddle(self.left_paddle, self.ball):
                     self.x_velocity = -self.x_velocity
                 elif self.ballIsLowerEdgeOfPaddle(self.left_paddle, self.ball):
                     self.x_velocity = -self.x_velocity
-                    self.y_velocity += 1
+                    self.y_velocity += self.bounce_angle
                 elif self.ballIsUpperEdgeOfPaddle(self.left_paddle, self.ball):
                     self.x_velocity = -self.x_velocity
-                    self.y_velocity -= 1
+                    self.y_velocity -= self.bounce_angle
 
             if self.ball.y <= 0 or self.ball.y >= (self.devices.screen.attributes.height - 1):
                 self.y_velocity = -self.y_velocity
@@ -140,7 +149,7 @@ class PongGame:
             if (self.ball.x > (self.devices.screen.attributes.width - 1)):
                 print("Left player has won!")
                 self.doReset()
-            elif(self.ball.x < 1):
+            elif(self.ball.x < 0):
                 print("Right players has won!")
                 self.doReset()
 
