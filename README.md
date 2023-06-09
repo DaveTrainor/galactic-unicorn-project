@@ -8,9 +8,19 @@ A project to display useful information on Pico display boards.
 
 ### Hardware Requirements
 
-- A Pico-W microcontroller.
-  - Can be purcased [with](https://shop.pimoroni.com/products/raspberry-pi-pico-w?variant=40454061752403) or [without](https://shop.pimoroni.com/products/raspberry-pi-pico?variant=32402092294227) headers. Get the pre-headed version if you don't want to solder them on yourself!
-- A display module. The [Pico Unicorn Pack](https://shop.pimoroni.com/products/pico-unicorn-pack?variant=32369501306963) works well with the project.
+The project is based on using a Raspberry Pi Pico-W microncontroller with a supported RGB LED matrix display. The two variants of this that we have used are:
+1) [Galactic Unicorn](https://shop.pimoroni.com/products/galactic-unicorn?variant=40057440960595)
+
+    Comes with Pico-W microncontroller already onboard. 
+
+ or
+
+2)  Pico Unicorn.
+
+    This doesn't have a Pico-W onboard, so you need to buy it seperately:
+    - Pico-W microcontroller.
+      - Can be purcased [with](https://shop.pimoroni.com/products/raspberry-pi-pico-w?variant=40454061752403) or [without](https://shop.pimoroni.com/products/raspberry-pi-pico?variant=32402092294227) headers. Get the pre-headed version if you don't want to solder them on yourself!
+    - The [The Pico Unicorn Pack Display Module](https://shop.pimoroni.com/products/pico-unicorn-pack?variant=32369501306963).
 
 
 ### New to Pico microcontrollers?
