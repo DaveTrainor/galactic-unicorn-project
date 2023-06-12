@@ -50,6 +50,9 @@ class FroggerGame():
         self.y_boundary = y_boundary
         self.colours = Colours()
 
+        self.starting_area = VisualElement(self.colours.blue, self.y_boundary + 1, 2, 0, 0)
+        self.goal_area = VisualElement(self.colours.blue, self.y_boundary + 1, 2, self.x_boundary - 1, 0)
+
         self.frog = Frog(self.colours.green, 1, 1, 1, 3, self.x_boundary, self.y_boundary)
 
     def button_watcher(self, button):
@@ -97,5 +100,8 @@ class FroggerTask(BaseTask):
 
     def render(self, screen):
         screen.clear()
+
+        screen.rectangle(*self.game.starting_area.get_properties())
+        screen.rectangle(*self.game.goal_area.get_properties())
 
         screen.rectangle(*self.game.frog.get_properties())
