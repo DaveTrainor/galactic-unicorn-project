@@ -18,7 +18,7 @@ class VisualElement:
         self.x = self.x_start
         self.y = self.y_start
 
-    def get_properties(self):
+    def get_render_properties(self):
         return [((self.x, self.y), (self.width, self.height)), self.colour]
 
     def reset(self):
@@ -44,16 +44,57 @@ class Frog(VisualElement):
             self.y = new_y
 
 
+class Enemy(VisualElement):
+    def __init__(self, colour, height, width, x_start, y_start, y_limit, direction, velocity):
+        super().__init__(colour, height, width, x_start, y_start)
+
+        self.y_limit = y_limit
+        self.direction = direction
+        self.velocity = velocity
+        self.time_counter = 0
+
+    def move(self):
+        self.time_counter += self.velocity
+
+        if self.time_counter >= 10:
+            if self.direction == 'down':
+                self.y += 1
+            if self.direction  == 'up':
+                self.y -= 1
+            self.time_counter = 0
+
+        if self.direction == 'down' and self.y > self.y_limit:
+            self.y = self.y_start
+
+        if self.direction == 'up' and self.y < -self.height:
+            self.y = self.y_start
+
+
 class FroggerGame():
     def __init__(self, x_boundary, y_boundary):
         self.x_boundary = x_boundary
         self.y_boundary = y_boundary
         self.colours = Colours()
+        self.time_counter = 0
 
-        self.starting_area = VisualElement(self.colours.blue, self.y_boundary + 1, 2, 0, 0)
+        self.start_area = VisualElement(self.colours.blue, self.y_boundary + 1, 2, 0, 0)
         self.goal_area = VisualElement(self.colours.blue, self.y_boundary + 1, 2, self.x_boundary - 1, 0)
 
+        self.enemy_1 = Enemy(self.colours.red, 3, 2, 4, -2, self.y_boundary, 'down', 2)
+        self.enemy_2 = Enemy(self.colours.yellow, 6, 2, 8, self.y_boundary - 1, self.y_boundary, 'up', 1)
+        self.enemy_3 = Enemy(self.colours.red, 3, 2, 12, -2, self.y_boundary, 'down', 3)
+
         self.frog = Frog(self.colours.green, 1, 1, 1, 3, self.x_boundary, self.y_boundary)
+
+
+    def timed_events(self):
+        self.time_counter += 1
+        
+        if self.time_counter > 3:
+            self.enemy_1.move()
+            self.enemy_2.move()
+            self.enemy_3.move()
+            self.time_counter = 0
 
     def button_watcher(self, button):
         if button == 'left_1':
@@ -96,12 +137,16 @@ class FroggerTask(BaseTask):
             self.game.button_watcher('right_2')
 
     def state(self):
-        pass
+        self.game.timed_events()
 
     def render(self, screen):
         screen.clear()
 
-        screen.rectangle(*self.game.starting_area.get_properties())
-        screen.rectangle(*self.game.goal_area.get_properties())
+        screen.rectangle(*self.game.start_area.get_render_properties())
+        screen.rectangle(*self.game.goal_area.get_render_properties())
 
-        screen.rectangle(*self.game.frog.get_properties())
+        screen.rectangle(*self.game.enemy_1.get_render_properties())
+        screen.rectangle(*self.game.enemy_2.get_render_properties())
+        screen.rectangle(*self.game.enemy_3.get_render_properties())
+
+        screen.rectangle(*self.game.frog.get_render_properties())
