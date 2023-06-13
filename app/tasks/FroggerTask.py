@@ -87,6 +87,7 @@ class FroggerGame():
         self.event_time_counter = 0
 
         # State
+        self.win_state = False
         self.loose_state = False
 
         # Visual Elements
@@ -100,6 +101,9 @@ class FroggerGame():
         self.frog = Frog(self.colours.green, 1, 1, 1, 3, self.x_boundary, self.y_boundary)
 
     # State Management
+
+    def set_win_state(self, win_state):
+        self.win_state = win_state
 
     def set_loose_state(self, loose_state):
         self.loose_state = loose_state
@@ -142,6 +146,7 @@ class FroggerGame():
             collision_event()
 
     # Processes that use the game loop
+
     def timed_events(self):
 
         # Enemy Movement
@@ -170,6 +175,23 @@ class FroggerGame():
             self.start_area.reset()
             self.goal_area.reset()
             self.frog.reset()
+
+        # Win Game
+        self.collision_detector(self.frog, self.goal_area, lambda: self.set_win_state(True))
+
+        if self.win_state is True:
+            self.event_time_counter += 1
+            self.start_area.change_colour(self.colours.green)
+            self.goal_area.change_colour(self.colours.green)
+
+        if self.event_time_counter > 60:
+            self.set_win_state(False)
+            self.event_time_counter = 0
+            self.start_area.reset()
+            self.goal_area.reset()
+            self.frog.reset()
+
+    # Controls
 
     def button_watcher(self, button):
         if button == 'left_1':
