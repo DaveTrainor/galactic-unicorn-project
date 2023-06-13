@@ -13,17 +13,23 @@ class VisualElement:
         self.colour = colour
         self.height = height
         self.width = width
+        self.x = x_start
+        self.y = y_start
+
         self.x_start = x_start
         self.y_start = y_start
-        self.x = self.x_start
-        self.y = self.y_start
+        self.colour_start = colour
 
     def get_render_properties(self):
         return [((self.x, self.y), (self.width, self.height)), self.colour]
+    
+    def change_colour(self, colour):
+        self.colour = colour
 
     def reset(self):
         self.x = self.x_start
         self.y = self.y_start
+        self.colour = self.colour_start
 
 
 class Frog(VisualElement):
@@ -75,8 +81,15 @@ class FroggerGame():
         self.x_boundary = x_boundary
         self.y_boundary = y_boundary
         self.colours = Colours()
-        self.time_counter = 0
 
+        # Counters
+        self.enemy_time_counter = 0
+        self.event_time_counter = 0
+
+        # State
+        self.loose_state = False
+
+        # Visual Elements
         self.start_area = VisualElement(self.colours.blue, self.y_boundary + 1, 2, 0, 0)
         self.goal_area = VisualElement(self.colours.blue, self.y_boundary + 1, 2, self.x_boundary - 1, 0)
 
@@ -85,6 +98,13 @@ class FroggerGame():
         self.enemy_3 = Enemy(self.colours.red, 3, 2, 12, -2, self.y_boundary, 'down', 3)
 
         self.frog = Frog(self.colours.green, 1, 1, 1, 3, self.x_boundary, self.y_boundary)
+
+    # State Management
+
+    def set_loose_state(self, loose_state):
+        self.loose_state = loose_state
+
+    # Collision Detection
 
     def collision_detector(self, element_1, element_2, collision_event):
         e1 = element_1
@@ -101,7 +121,7 @@ class FroggerGame():
         y_min_2 = e2.y
         y_max_2 = e2.y + e2.height - 1
 
-        # Check if the elements overlap on the x and y axes (ie. if they have collided)
+        # Check if the elements overlap on both the x and y axes (ie. if they have collided)
         x_overlap = False
         y_overlap = False
 
@@ -121,23 +141,35 @@ class FroggerGame():
         if x_overlap and y_overlap:
             collision_event()
 
-    def collision_event(self):
-        self.start_area.colour = self.colours.red
-
+    # Processes that use the game loop
     def timed_events(self):
-        self.collision_detector(self.frog, self.enemy_1, self.collision_event)
-        self.collision_detector(self.frog, self.enemy_2, self.collision_event)
-        self.collision_detector(self.frog, self.enemy_3, self.collision_event)
 
-        self.time_counter += 1
-
-        if self.time_counter > 3:
-
+        # Enemy Movement
+        self.enemy_time_counter += 1
+        
+        if self.enemy_time_counter > 3:
             self.enemy_1.move()
             self.enemy_2.move()
             self.enemy_3.move()
+            self.enemy_time_counter = 0
 
-            self.time_counter = 0
+        # Loose Game
+        self.collision_detector(self.frog, self.enemy_1, lambda: self.set_loose_state(True))
+        self.collision_detector(self.frog, self.enemy_2, lambda: self.set_loose_state(True))
+        self.collision_detector(self.frog, self.enemy_3, lambda: self.set_loose_state(True))
+
+        if self.loose_state is True:
+            self.event_time_counter += 1
+            self.start_area.change_colour(self.colours.red)
+            self.goal_area.change_colour(self.colours.red)
+            self.frog.change_colour(self.colours.red)
+
+        if self.event_time_counter > 60:
+            self.set_loose_state(False)
+            self.event_time_counter = 0
+            self.start_area.reset()
+            self.goal_area.reset()
+            self.frog.reset()
 
     def button_watcher(self, button):
         if button == 'left_1':
