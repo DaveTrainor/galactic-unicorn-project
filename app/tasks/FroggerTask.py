@@ -86,14 +86,57 @@ class FroggerGame():
 
         self.frog = Frog(self.colours.green, 1, 1, 1, 3, self.x_boundary, self.y_boundary)
 
+    def collision_detector(self, element_1, element_2, collision_event):
+        e1 = element_1
+        e2 = element_2
+
+        # The coordinates of the corners of the two elements.
+        x_min_1 = e1.x
+        x_max_1 = e1.x + e1.width - 1
+        y_min_1 = e1.y
+        y_max_1 = e1.y + e1.height - 1
+
+        x_min_2 = e2.x
+        x_max_2 = e2.x + e2.width - 1
+        y_min_2 = e2.y
+        y_max_2 = e2.y + e2.height - 1
+
+        # Check if the elements overlap on the x and y axes (ie. if they have collided)
+        x_overlap = False
+        y_overlap = False
+
+        if x_min_1 <= x_min_2 <= x_max_1 or x_min_1 <= x_max_2 <= x_max_1:
+            x_overlap = True
+
+        if x_min_2 <= x_min_1 <= x_max_2 or x_min_2 <= x_max_1 <= x_max_2:
+            x_overlap = True
+
+        if y_min_1 <= y_min_2 <= y_max_1 or y_min_1 <= y_max_2 <= y_max_1:
+            y_overlap = True
+
+        if y_min_2 <= y_min_1 <= y_max_2 or y_min_2 <= y_max_1 <= y_max_2:
+            y_overlap = True
+
+        # If the elements have collided then invoke a method.
+        if x_overlap and y_overlap:
+            collision_event()
+
+    def collision_event(self):
+        self.start_area.colour = self.colours.red
 
     def timed_events(self):
+        self.collision_detector(self.frog, self.enemy_1, self.collision_event)
+        self.collision_detector(self.frog, self.enemy_2, self.collision_event)
+        self.collision_detector(self.frog, self.enemy_3, self.collision_event)
+
         self.time_counter += 1
-        
+
         if self.time_counter > 3:
+
             self.enemy_1.move()
             self.enemy_2.move()
             self.enemy_3.move()
+
             self.time_counter = 0
 
     def button_watcher(self, button):
