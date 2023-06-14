@@ -94,6 +94,7 @@ class FroggerGame():
         # State
         self.win_state = False
         self.loose_state = False
+        self.lock_controls = False
 
         # Visual Elements
         self.start_area = VisualElement(self.colours.blue, 2, self.y_boundary + 1, 0, 0)
@@ -112,6 +113,9 @@ class FroggerGame():
 
     def set_loose_state(self, loose_state):
         self.loose_state = loose_state
+
+    def set_control_lock(self, lock_controls):
+        self.lock_controls = lock_controls
 
     # Collision Detection
 
@@ -146,6 +150,7 @@ class FroggerGame():
         self.collision_detector(self.frog, self.enemy_3, lambda: self.set_loose_state(True))
 
         if self.loose_state is True:
+            self.set_control_lock(True)
             self.event_time_counter += 1
             self.start_area.change_colour(self.colours.red)
             self.goal_area.change_colour(self.colours.red)
@@ -157,11 +162,13 @@ class FroggerGame():
             self.start_area.reset()
             self.goal_area.reset()
             self.frog.reset()
+            self.set_control_lock(False)
 
         # Win Game
         self.collision_detector(self.frog, self.goal_area, lambda: self.set_win_state(True))
 
         if self.win_state is True:
+            self.set_control_lock(True)
             self.event_time_counter += 1
             self.start_area.change_colour(self.colours.green)
             self.goal_area.change_colour(self.colours.green)
@@ -172,21 +179,23 @@ class FroggerGame():
             self.start_area.reset()
             self.goal_area.reset()
             self.frog.reset()
+            self.set_control_lock(False)
 
     # Controls
 
     def button_watcher(self, button):
-        if button == 'left_1':
-            self.frog.move(0, -1)
-            
-        if button == 'left_2':
-            self.frog.move(0, 1)
+        if self.lock_controls is False:
+            if button == 'left_1':
+                self.frog.move(0, -1)
+                
+            if button == 'left_2':
+                self.frog.move(0, 1)
 
-        if button == 'right_1':
-            self.frog.move(1, 0)
+            if button == 'right_1':
+                self.frog.move(1, 0)
 
-        if button == 'right_2':
-            self.frog.move(-1, 0)
+            if button == 'right_2':
+                self.frog.move(-1, 0)
 
 
 class FroggerTask(BaseTask):
