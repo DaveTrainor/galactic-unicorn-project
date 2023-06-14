@@ -23,7 +23,11 @@ class VisualElement:
 
     def get_render_properties(self):
         return [((self.x, self.y), (self.x_length, self.y_length)), self.colour]
-    
+
+    def get_footprint(self):
+        footprint = [self.x, self.x + self.x_length - 1, self.y, self.y + self.y_length - 1]
+        return footprint
+
     def change_colour(self, colour):
         self.colour = colour
 
@@ -112,39 +116,16 @@ class FroggerGame():
     # Collision Detection
 
     def collision_detector(self, element_1, element_2, collision_event):
-        e1 = element_1
-        e2 = element_2
+        x_min_1, x_max_1, y_min_1, y_max_1 = element_1.get_footprint()
+        x_min_2, x_max_2, y_min_2, y_max_2 = element_2.get_footprint()
 
-        # The coordinates of the corners of the two elements.
-        x_min_1 = e1.x
-        x_max_1 = e1.x + e1.x_length - 1
-        y_min_1 = e1.y
-        y_max_1 = e1.y + e1.y_length - 1
-
-        x_min_2 = e2.x
-        x_max_2 = e2.x + e2.x_length - 1
-        y_min_2 = e2.y
-        y_max_2 = e2.y + e2.y_length - 1
-
-        # Check if the elements overlap on both the x and y axes (ie. if they have collided)
-        x_overlap = False
-        y_overlap = False
-
-        if x_min_1 <= x_min_2 <= x_max_1 or x_min_1 <= x_max_2 <= x_max_1:
-            x_overlap = True
-
-        if x_min_2 <= x_min_1 <= x_max_2 or x_min_2 <= x_max_1 <= x_max_2:
-            x_overlap = True
-
-        if y_min_1 <= y_min_2 <= y_max_1 or y_min_1 <= y_max_2 <= y_max_1:
-            y_overlap = True
-
-        if y_min_2 <= y_min_1 <= y_max_2 or y_min_2 <= y_max_1 <= y_max_2:
-            y_overlap = True
-
-        # If the elements have collided then invoke a method.
-        if x_overlap and y_overlap:
-            collision_event()
+        if x_max_1 < x_min_2 or x_max_2 < x_min_1:
+            return
+        
+        if y_max_1 < y_min_2 or y_max_2 < y_min_1:
+            return
+        
+        collision_event()
 
     # Processes that use the game loop
 
