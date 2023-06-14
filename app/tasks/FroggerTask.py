@@ -9,10 +9,10 @@ class Colours:
 
 
 class VisualElement:
-    def __init__(self, colour, height, width, x_start, y_start):
+    def __init__(self, colour, x_length, y_length, x_start, y_start):
         self.colour = colour
-        self.height = height
-        self.width = width
+        self.x_length = x_length
+        self.y_length = y_length
         self.x = x_start
         self.y = y_start
 
@@ -21,7 +21,7 @@ class VisualElement:
         self.colour_start = colour
 
     def get_render_properties(self):
-        return [((self.x, self.y), (self.width, self.height)), self.colour]
+        return [((self.x, self.y), (self.x_length, self.y_length)), self.colour]
     
     def change_colour(self, colour):
         self.colour = colour
@@ -33,8 +33,8 @@ class VisualElement:
 
 
 class Frog(VisualElement):
-    def __init__(self, colour, height, width, x_start, y_start, x_limit, y_limit):
-        super().__init__(colour, height, width, x_start, y_start)
+    def __init__(self, colour, x_length, y_length, x_start, y_start, x_limit, y_limit):
+        super().__init__(colour, x_length, y_length, x_start, y_start)
 
         self.x_limit = x_limit
         self.y_limit = y_limit
@@ -51,8 +51,8 @@ class Frog(VisualElement):
 
 
 class Enemy(VisualElement):
-    def __init__(self, colour, height, width, x_start, y_start, y_limit, direction, velocity):
-        super().__init__(colour, height, width, x_start, y_start)
+    def __init__(self, colour, x_length, y_length, x_start, y_start, y_limit, direction, velocity):
+        super().__init__(colour, x_length, y_length, x_start, y_start)
 
         self.y_limit = y_limit
         self.direction = direction
@@ -72,7 +72,7 @@ class Enemy(VisualElement):
         if self.direction == 'down' and self.y > self.y_limit:
             self.y = self.y_start
 
-        if self.direction == 'up' and self.y < -self.height:
+        if self.direction == 'up' and self.y < -self.y_length:
             self.y = self.y_start
 
 
@@ -91,12 +91,12 @@ class FroggerGame():
         self.loose_state = False
 
         # Visual Elements
-        self.start_area = VisualElement(self.colours.blue, self.y_boundary + 1, 2, 0, 0)
-        self.goal_area = VisualElement(self.colours.blue, self.y_boundary + 1, 2, self.x_boundary - 1, 0)
+        self.start_area = VisualElement(self.colours.blue, 2, self.y_boundary + 1, 0, 0)
+        self.goal_area = VisualElement(self.colours.blue, 2, self.y_boundary + 1, self.x_boundary - 1, 0)
 
-        self.enemy_1 = Enemy(self.colours.red, 3, 2, 4, -2, self.y_boundary, 'down', 2)
-        self.enemy_2 = Enemy(self.colours.yellow, 6, 2, 8, self.y_boundary - 1, self.y_boundary, 'up', 1)
-        self.enemy_3 = Enemy(self.colours.red, 3, 2, 12, -2, self.y_boundary, 'down', 3)
+        self.enemy_1 = Enemy(self.colours.red, 2, 3, 4, -2, self.y_boundary, 'down', 2)
+        self.enemy_2 = Enemy(self.colours.yellow, 2, 6, 8, self.y_boundary - 1, self.y_boundary, 'up', 1)
+        self.enemy_3 = Enemy(self.colours.red, 2, 3, 12, -2, self.y_boundary, 'down', 3)
 
         self.frog = Frog(self.colours.green, 1, 1, 1, 3, self.x_boundary, self.y_boundary)
 
@@ -116,14 +116,14 @@ class FroggerGame():
 
         # The coordinates of the corners of the two elements.
         x_min_1 = e1.x
-        x_max_1 = e1.x + e1.width - 1
+        x_max_1 = e1.x + e1.x_length - 1
         y_min_1 = e1.y
-        y_max_1 = e1.y + e1.height - 1
+        y_max_1 = e1.y + e1.y_length - 1
 
         x_min_2 = e2.x
-        x_max_2 = e2.x + e2.width - 1
+        x_max_2 = e2.x + e2.x_length - 1
         y_min_2 = e2.y
-        y_max_2 = e2.y + e2.height - 1
+        y_max_2 = e2.y + e2.y_length - 1
 
         # Check if the elements overlap on both the x and y axes (ie. if they have collided)
         x_overlap = False
@@ -210,9 +210,9 @@ class FroggerGame():
 class FroggerTask(BaseTask):
     def __init__(self, settings):
         super().__init__(settings)
-        self.display_width = 15
-        self.display_height = 6
-        self.game = FroggerGame(self.display_width, self.display_height)
+        self.display_x_length = 15
+        self.display_y_length = 6
+        self.game = FroggerGame(self.display_x_length, self.display_y_length)
 
     def start(self):
         pass
