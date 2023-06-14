@@ -2,10 +2,11 @@ from .BaseTask import BaseTask
 
 class Colours:
     def __init__(self):
-        self.red = (255, 50, 50)
-        self.green = (100, 255, 100)
         self.blue = (0, 0, 150)
-        self.yellow = (255, 255, 20)
+        self.green = (100, 255, 100)
+        self.purple = (255, 0, 255)
+        self.red = (255, 0, 0)
+        self.yellow = (255, 255, 0)
 
 
 class VisualElement:
@@ -94,9 +95,9 @@ class FroggerGame():
         self.start_area = VisualElement(self.colours.blue, 2, self.y_boundary + 1, 0, 0)
         self.goal_area = VisualElement(self.colours.blue, 2, self.y_boundary + 1, self.x_boundary - 1, 0)
 
-        self.enemy_1 = Enemy(self.colours.red, 2, 3, 4, -2, self.y_boundary, 'down', 2)
+        self.enemy_1 = Enemy(self.colours.purple, 2, 3, 4, -2, self.y_boundary, 'down', 2)
         self.enemy_2 = Enemy(self.colours.yellow, 2, 6, 8, self.y_boundary - 1, self.y_boundary, 'up', 1)
-        self.enemy_3 = Enemy(self.colours.red, 2, 3, 12, -2, self.y_boundary, 'down', 3)
+        self.enemy_3 = Enemy(self.colours.purple, 2, 3, 12, -2, self.y_boundary, 'down', 3)
 
         self.frog = Frog(self.colours.green, 1, 1, 1, 3, self.x_boundary, self.y_boundary)
 
