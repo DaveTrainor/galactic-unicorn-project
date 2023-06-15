@@ -117,6 +117,17 @@ class FroggerGame():
     def set_control_lock(self, lock_controls):
         self.lock_controls = lock_controls
 
+    # Reset Game
+    def reset_game(self):
+        self.set_win_state(False)
+        self.set_loose_state(False)
+        self.set_control_lock(False)
+        self.event_time_counter = 0
+        self.start_area.reset()
+        self.goal_area.reset()
+        self.frog.reset()
+
+
     # Collision Detection
 
     def collision_detector(self, element_1, element_2, collision_event):
@@ -154,12 +165,7 @@ class FroggerGame():
             self.frog.change_colour(self.colours.red)
 
         if self.event_time_counter > 60:
-            self.set_loose_state(False)
-            self.event_time_counter = 0
-            self.start_area.reset()
-            self.goal_area.reset()
-            self.frog.reset()
-            self.set_control_lock(False)
+            self.reset_game()
 
     def win_handler(self):
         self.collision_detector(self.frog, self.goal_area, lambda: self.set_win_state(True))
@@ -171,12 +177,7 @@ class FroggerGame():
             self.goal_area.change_colour(self.colours.green)
 
         if self.event_time_counter > 60:
-            self.set_win_state(False)
-            self.event_time_counter = 0
-            self.start_area.reset()
-            self.goal_area.reset()
-            self.frog.reset()
-            self.set_control_lock(False)
+            self.reset_game()
 
     def timed_events(self):
         self.enemy_movement()
