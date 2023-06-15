@@ -133,16 +133,17 @@ class FroggerGame():
 
     # Processes that use the game loop
 
-    def timed_events(self):
-
-        # Enemy Movement
+    def enemy_movement(self):
         self.enemy_time_counter += 1
-        
         if self.enemy_time_counter > 3:
             self.enemy_1.move()
             self.enemy_2.move()
             self.enemy_3.move()
             self.enemy_time_counter = 0
+
+    def timed_events(self):
+
+        self.enemy_movement()
 
         # Loose Game
         self.collision_detector(self.frog, self.enemy_1, lambda: self.set_loose_state(True))
