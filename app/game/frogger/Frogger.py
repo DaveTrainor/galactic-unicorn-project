@@ -8,6 +8,7 @@ class Frogger():
     def __init__(self, x_boundary, y_boundary):
         self.x_boundary = x_boundary
         self.y_boundary = y_boundary
+
         self.colours = Colours()
 
         self.enemy_movement_counter = Counter(3)
@@ -30,6 +31,7 @@ class Frogger():
         self.frog = Frog(self.colours.green_light, 1, 1, 1, 3, self.x_boundary, self.y_boundary)
 
         self.visual_elements = [self.start_area, self.goal_area, self.enemy_1, self.enemy_2, self.enemy_3, self.frog]
+        self.enemies = [self.enemy_1, self.enemy_2, self.enemy_3]
 
     # State Management
     def set_win_state(self, win_state):
@@ -70,19 +72,17 @@ class Frogger():
         self.collision_detector(self.frog, self.goal_area, lambda: self.set_win_state(True))
 
     def check_loose_conditions(self):
-        self.collision_detector(self.frog, self.enemy_1, lambda: self.set_loose_state(True))
-        self.collision_detector(self.frog, self.enemy_2, lambda: self.set_loose_state(True))
-        self.collision_detector(self.frog, self.enemy_3, lambda: self.set_loose_state(True))
+        for enemy in self.enemies:
+            self.collision_detector(self.frog, enemy, lambda: self.set_loose_state(True))
 
     # Processes that use the game loop
-    def enemy_movement(self):
+    def enemy_movement_loop(self):
         self.enemy_movement_counter.increment()
         if self.enemy_movement_counter.check_limit() is True:
-            self.enemy_1.move()
-            self.enemy_2.move()
-            self.enemy_3.move()
+            for enemy in self.enemies:
+                enemy.move()
 
-    def loose_handler(self):
+    def loose_event_loop(self):
         self.check_loose_conditions()
 
         if self.loose_state is True:
@@ -95,7 +95,7 @@ class Frogger():
         if self.loose_event_counter.check_limit() is True:
             self.reset_game()
 
-    def win_handler(self):
+    def win_event_loop(self):
         self.check_win_conditions()
 
         if self.win_state is True:
@@ -107,10 +107,10 @@ class Frogger():
         if self.win_event_counter.check_limit() is True:
             self.reset_game()
 
-    def loop_events(self):
-        self.enemy_movement()
-        self.win_handler()
-        self.loose_handler()
+    def loops(self):
+        self.enemy_movement_loop()
+        self.win_event_loop()
+        self.loose_event_loop()
 
     # Controls
     def button_watcher(self, button):

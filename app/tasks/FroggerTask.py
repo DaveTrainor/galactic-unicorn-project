@@ -28,7 +28,7 @@ class FroggerTask(BaseTask):
             self.game.button_watcher('right_2')
 
     def state(self):
-        self.game.loop_events()
+        self.game.loops()
 
     def render(self, screen):
         screen.clear()
