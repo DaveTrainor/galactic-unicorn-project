@@ -1,4 +1,5 @@
 from app.utilities.Colours import Colours
+from app.game.utilities.State import State
 from app.game.utilities.Counter import Counter
 from app.game.utilities.VisualElement import VisualElement
 from .visual_elements.Frog import Frog
@@ -16,9 +17,9 @@ class Frogger():
         self.loose_event_counter = Counter(60)
 
         # State
-        self.win_state = False
-        self.loose_state = False
-        self.lock_controls = False
+        self.win_state = State(False)
+        self.loose_state = State(False)
+        self.lock_controls = State(False)
 
         # Visual Elements
         self.start_area = VisualElement(self.colours.blue, 2, self.y_boundary + 1, 0, 0)
@@ -46,7 +47,7 @@ class Frogger():
         self.lock_controls = lock_controls
 
     # Collision Detection
-    def collision_detector(self, element_1, element_2, collision_event):
+    def collision_detector(self, element_1, element_2,):
         x_min_1, x_max_1, y_min_1, y_max_1 = element_1.get_footprint()
         x_min_2, x_max_2, y_min_2, y_max_2 = element_2.get_footprint()
 
@@ -56,13 +57,13 @@ class Frogger():
         if y_max_1 < y_min_2 or y_max_2 < y_min_1:
             return
         
-        collision_event()
+        return True
 
     # Reset Game
     def reset_game(self):
-        self.set_win_state(False)
-        self.set_loose_state(False)
-        self.set_control_lock(False)
+        self.win_state.reset()
+        self.loose_state.reset()
+        self.lock_controls.reset()
         self.win_event_counter.reset()
         self.loose_event_counter.reset()
         self.start_area.reset()
@@ -71,11 +72,13 @@ class Frogger():
 
     # Check for Win / Loose
     def check_win_conditions(self):
-        self.collision_detector(self.frog, self.goal_area, lambda: self.set_win_state(True))
+        if self.collision_detector(self.frog, self.goal_area):
+            self.win_state.set(True)
 
     def check_loose_conditions(self):
         for enemy in self.enemies:
-            self.collision_detector(self.frog, enemy, lambda: self.set_loose_state(True))
+            if self.collision_detector(self.frog, enemy):
+                self.loose_state.set(True)
 
     # Processes that use the game loop
     def enemy_movement_loop(self):
@@ -87,8 +90,8 @@ class Frogger():
     def loose_event_loop(self):
         self.check_loose_conditions()
 
-        if self.loose_state is True:
-            self.set_control_lock(True)
+        if self.loose_state.get() is True:
+            self.lock_controls.set(True)
             self.loose_event_counter.increment()
             self.start_area.change_colour(self.colours.red)
             self.goal_area.change_colour(self.colours.red)
@@ -100,8 +103,8 @@ class Frogger():
     def win_event_loop(self):
         self.check_win_conditions()
 
-        if self.win_state is True:
-            self.set_control_lock(True)
+        if self.win_state.get() is True:
+            self.lock_controls.set(True)
             self.win_event_counter.increment()
             self.start_area.change_colour(self.colours.green)
             self.goal_area.change_colour(self.colours.green)
@@ -116,7 +119,7 @@ class Frogger():
 
     # Controls
     def button_watcher(self, button):
-        if self.lock_controls is False:
+        if self.lock_controls.get() is False:
 
             if button == 'left_1':
                 self.frog.move(0, -1)
