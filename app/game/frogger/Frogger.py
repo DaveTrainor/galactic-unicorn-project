@@ -43,7 +43,7 @@ class Enemy(VisualElement):
         if self.direction == 'up' and self.y < -self.y_length:
             self.y = self.y_start
 
-class FroggerGame():
+class Frogger():
     def __init__(self, x_boundary, y_boundary):
         self.x_boundary = x_boundary
         self.y_boundary = y_boundary

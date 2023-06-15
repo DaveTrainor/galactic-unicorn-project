@@ -1,4 +1,4 @@
-from app.game.frogger.Frogger import FroggerGame
+from app.game.frogger.Frogger import Frogger
 from .BaseTask import BaseTask
 
 class FroggerTask(BaseTask):
@@ -6,7 +6,7 @@ class FroggerTask(BaseTask):
         super().__init__(settings)
         self.display_x_length = 15
         self.display_y_length = 6
-        self.game = FroggerGame(self.display_x_length, self.display_y_length)
+        self.game = Frogger(self.display_x_length, self.display_y_length)
 
     def start(self):
         pass
