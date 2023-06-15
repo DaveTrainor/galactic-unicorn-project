@@ -24,14 +24,16 @@ class Frogger():
         self.start_area = VisualElement(self.colours.blue, 2, self.y_boundary + 1, 0, 0)
         self.goal_area = VisualElement(self.colours.blue, 2, self.y_boundary + 1, self.x_boundary - 1, 0)
 
-        self.enemy_1 = Enemy(self.colours.purple, 2, 3, 4, -2, self.y_boundary, 'down', 2)
-        self.enemy_2 = Enemy(self.colours.yellow, 2, 6, 8, self.y_boundary - 1, self.y_boundary, 'up', 1)
-        self.enemy_3 = Enemy(self.colours.purple, 2, 3, 12, -2, self.y_boundary, 'down', 3)
+        self.enemy_1 = Enemy(self.colours.purple, 2, 3, 3, -2, self.y_boundary, 'down', 2)
+        self.enemy_2 = Enemy(self.colours.yellow, 2, 6, 6, self.y_boundary - 1, self.y_boundary, 'up', 1)
+        self.enemy_3 = Enemy(self.colours.purple, 2, 3, 9, -2, self.y_boundary, 'down', 3)
+        self.enemy_4 = Enemy(self.colours.white, 1, 2, 12, -2, self.y_boundary, 'down', 3)
+        self.enemy_5 = Enemy(self.colours.white, 1, 2, 13, -2, self.y_boundary, 'down', 5)
 
         self.frog = Frog(self.colours.green_light, 1, 1, 1, 3, self.x_boundary, self.y_boundary)
 
-        self.visual_elements = [self.start_area, self.goal_area, self.enemy_1, self.enemy_2, self.enemy_3, self.frog]
-        self.enemies = [self.enemy_1, self.enemy_2, self.enemy_3]
+        self.visual_elements = [self.start_area, self.goal_area, self.enemy_1, self.enemy_2, self.enemy_3, self.enemy_4, self.enemy_5, self.frog]
+        self.enemies = [self.enemy_1, self.enemy_2, self.enemy_3, self.enemy_4, self.enemy_5]
 
     # State Management
     def set_win_state(self, win_state):
