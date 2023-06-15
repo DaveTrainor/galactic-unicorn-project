@@ -141,11 +141,7 @@ class FroggerGame():
             self.enemy_3.move()
             self.enemy_time_counter = 0
 
-    def timed_events(self):
-
-        self.enemy_movement()
-
-        # Loose Game
+    def loose_handler(self):
         self.collision_detector(self.frog, self.enemy_1, lambda: self.set_loose_state(True))
         self.collision_detector(self.frog, self.enemy_2, lambda: self.set_loose_state(True))
         self.collision_detector(self.frog, self.enemy_3, lambda: self.set_loose_state(True))
@@ -164,6 +160,12 @@ class FroggerGame():
             self.goal_area.reset()
             self.frog.reset()
             self.set_control_lock(False)
+
+    def timed_events(self):
+
+        self.enemy_movement()
+        self.loose_handler()
+
 
         # Win Game
         self.collision_detector(self.frog, self.goal_area, lambda: self.set_win_state(True))
