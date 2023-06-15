@@ -34,4 +34,4 @@ class FroggerTask(BaseTask):
         screen.clear()
 
         for element in self.game.visual_elements:
-            screen.rectangle(*element.get_render_properties())
+            screen.rectangle(*element.get_rectangle_properties())
