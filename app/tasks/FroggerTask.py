@@ -88,8 +88,8 @@ class FroggerGame():
         self.colours = Colours()
 
         # Counters
-        self.enemy_time_counter = 0
-        self.event_time_counter = 0
+        self.enemy_loop_counter = 0
+        self.event_loop_counter = 0
 
         # State
         self.win_state = False
@@ -122,11 +122,10 @@ class FroggerGame():
         self.set_win_state(False)
         self.set_loose_state(False)
         self.set_control_lock(False)
-        self.event_time_counter = 0
+        self.event_loop_counter = 0
         self.start_area.reset()
         self.goal_area.reset()
         self.frog.reset()
-
 
     # Collision Detection
 
@@ -145,12 +144,12 @@ class FroggerGame():
     # Processes that use the game loop
 
     def enemy_movement(self):
-        self.enemy_time_counter += 1
-        if self.enemy_time_counter > 3:
+        self.enemy_loop_counter += 1
+        if self.enemy_loop_counter > 3:
             self.enemy_1.move()
             self.enemy_2.move()
             self.enemy_3.move()
-            self.enemy_time_counter = 0
+            self.enemy_loop_counter = 0
 
     def loose_handler(self):
         self.collision_detector(self.frog, self.enemy_1, lambda: self.set_loose_state(True))
@@ -159,12 +158,12 @@ class FroggerGame():
 
         if self.loose_state is True:
             self.set_control_lock(True)
-            self.event_time_counter += 1
+            self.event_loop_counter += 1
             self.start_area.change_colour(self.colours.red)
             self.goal_area.change_colour(self.colours.red)
             self.frog.change_colour(self.colours.red)
 
-        if self.event_time_counter > 60:
+        if self.event_loop_counter > 60:
             self.reset_game()
 
     def win_handler(self):
@@ -172,14 +171,14 @@ class FroggerGame():
 
         if self.win_state is True:
             self.set_control_lock(True)
-            self.event_time_counter += 1
+            self.event_loop_counter += 1
             self.start_area.change_colour(self.colours.green)
             self.goal_area.change_colour(self.colours.green)
 
-        if self.event_time_counter > 60:
+        if self.event_loop_counter > 60:
             self.reset_game()
 
-    def timed_events(self):
+    def loop_events(self):
         self.enemy_movement()
         self.win_handler()
         self.loose_handler()
@@ -228,7 +227,7 @@ class FroggerTask(BaseTask):
             self.game.button_watcher('right_2')
 
     def state(self):
-        self.game.timed_events()
+        self.game.loop_events()
 
     def render(self, screen):
         screen.clear()
