@@ -2,7 +2,7 @@ from .BaseTask import BaseTask
 
 class Colours:
     def __init__(self):
-        self.blue = (0, 0, 150)
+        self.blue = (0, 0, 255)
         self.green = (100, 255, 100)
         self.purple = (255, 0, 255)
         self.red = (255, 0, 0)
@@ -62,17 +62,17 @@ class Enemy(VisualElement):
         self.y_limit = y_limit
         self.direction = direction
         self.velocity = velocity
-        self.time_counter = 0
+        self.movement_counter = 0
 
     def move(self):
-        self.time_counter += self.velocity
+        self.movement_counter += self.velocity
 
-        if self.time_counter >= 10:
+        if self.movement_counter >= 10:
             if self.direction == 'down':
                 self.y += 1
             if self.direction  == 'up':
                 self.y -= 1
-            self.time_counter = 0
+            self.movement_counter = 0
 
         if self.direction == 'down' and self.y > self.y_limit:
             self.y = self.y_start
