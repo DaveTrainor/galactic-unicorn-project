@@ -1,47 +1,8 @@
 from app.utilities.Colours import Colours
 from app.game.utilities.VisualElement import VisualElement
 
-class Frog(VisualElement):
-    def __init__(self, colour, x_length, y_length, x_start, y_start, x_limit, y_limit):
-        super().__init__(colour, x_length, y_length, x_start, y_start)
-
-        self.x_limit = x_limit
-        self.y_limit = y_limit
-
-    def move(self, x_change, y_change):
-        new_x = self.x + x_change
-        new_y = self.y + y_change
-
-        if new_x >= 0 and new_x <= self.x_limit:
-            self.x = new_x
-
-        if new_y >= 0 and new_y <=self.y_limit:
-            self.y = new_y
-
-class Enemy(VisualElement):
-    def __init__(self, colour, x_length, y_length, x_start, y_start, y_limit, direction, velocity):
-        super().__init__(colour, x_length, y_length, x_start, y_start)
-
-        self.y_limit = y_limit
-        self.direction = direction
-        self.velocity = velocity
-        self.movement_counter = 0
-
-    def move(self):
-        self.movement_counter += self.velocity
-
-        if self.movement_counter >= 10:
-            if self.direction == 'down':
-                self.y += 1
-            if self.direction  == 'up':
-                self.y -= 1
-            self.movement_counter = 0
-
-        if self.direction == 'down' and self.y > self.y_limit:
-            self.y = self.y_start
-
-        if self.direction == 'up' and self.y < -self.y_length:
-            self.y = self.y_start
+from .visual_elements.Frog import Frog
+from .visual_elements.Enemy import Enemy
 
 class Frogger():
     def __init__(self, x_boundary, y_boundary):
@@ -66,7 +27,7 @@ class Frogger():
         self.enemy_2 = Enemy(self.colours.yellow, 2, 6, 8, self.y_boundary - 1, self.y_boundary, 'up', 1)
         self.enemy_3 = Enemy(self.colours.purple, 2, 3, 12, -2, self.y_boundary, 'down', 3)
 
-        self.frog = Frog(self.colours.green, 1, 1, 1, 3, self.x_boundary, self.y_boundary)
+        self.frog = Frog(self.colours.green_light, 1, 1, 1, 3, self.x_boundary, self.y_boundary)
 
         self.visual_elements = [self.start_area, self.goal_area, self.enemy_1, self.enemy_2, self.enemy_3, self.frog]
 
