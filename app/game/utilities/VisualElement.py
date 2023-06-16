@@ -13,9 +13,8 @@ class VisualElement:
     def get_rectangle_properties(self):
         return [((self.x, self.y), (self.x_length, self.y_length)), self.colour]
 
-    def get_footprint(self):
-        footprint = [self.x, self.x + self.x_length - 1, self.y, self.y + self.y_length - 1]
-        return footprint
+    def get_collision_properties(self):
+        return [self.x, self.x + self.x_length - 1, self.y, self.y + self.y_length - 1]
 
     def change_colour(self, colour):
         self.colour = colour
