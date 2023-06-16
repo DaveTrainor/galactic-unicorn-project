@@ -1,13 +1,13 @@
 class VisualElement:
-    def __init__(self, colour, x_length, y_length, x_start, y_start):
+    def __init__(self, colour, x_length, y_length, x_position, y_position):
         self.colour = colour
         self.x_length = x_length
         self.y_length = y_length
-        self.x = x_start
-        self.y = y_start
+        self.x = x_position
+        self.y = y_position
 
-        self.x_start = x_start
-        self.y_start = y_start
+        self.x_start = x_position
+        self.y_start = y_position
         self.colour_start = colour
 
     def get_rectangle_properties(self):
