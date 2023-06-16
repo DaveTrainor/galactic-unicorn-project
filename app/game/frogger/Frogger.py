@@ -11,16 +11,18 @@ class Frogger():
         self.x_boundary = x_boundary
         self.y_boundary = y_boundary
 
+        # Colours
         self.colours = Colours()
-
-        self.enemy_movement_counter = Counter(3)
-        self.win_event_counter = Counter(60)
-        self.loose_event_counter = Counter(60)
 
         # State
         self.win_state = State(False)
         self.loose_state = State(False)
         self.lock_controls = State(False)
+
+        # Loop Counters
+        self.win_event_counter = Counter(60)
+        self.loose_event_counter = Counter(60)
+        self.enemy_movement_counter = Counter(3)
 
         # Visual Elements
         self.start_area = VisualElement(self.colours.blue, 2, self.y_boundary + 1, 0, 0)
@@ -36,16 +38,6 @@ class Frogger():
 
         self.visual_elements = [self.start_area, self.goal_area, self.enemy_1, self.enemy_2, self.enemy_3, self.enemy_4, self.enemy_5, self.frog]
         self.enemies = [self.enemy_1, self.enemy_2, self.enemy_3, self.enemy_4, self.enemy_5]
-
-    # State Management
-    def set_win_state(self, win_state):
-        self.win_state = win_state
-
-    def set_loose_state(self, loose_state):
-        self.loose_state = loose_state
-
-    def set_control_lock(self, lock_controls):
-        self.lock_controls = lock_controls
 
     # Check for Win / Loose
     def check_win_conditions(self):
