@@ -77,12 +77,12 @@ locale = {
   mpremote devs
   ``` 
 
-   Connect to the Pico:
-  ```bash
-  mpremote connect [put address here]
+  Enter the device address in .pico-up.ini:
+  ```ini
+  [device]
+  address = '/dev/cu.usbmodem2101'
   ```
 
-  `ctrl ]` to exit.
 - Deploy to the Pico 👇
 
 ---
