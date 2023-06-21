@@ -3,6 +3,8 @@ from app.TaskManager import start_manager
 from app.device import setup_devices
 import uasyncio as asyncio
 
+from app.tasks.FroggerTask import FroggerTask
+from app.tasks.CursorTask import CursorTask
 from app.tasks.ColourTask import ColourTask
 from app.tasks.TimeScrollerTask import TimeScrollerTask
 
@@ -10,9 +12,11 @@ devices = setup_devices()
 settings = app.settings.Settings()
 
 start_manager(asyncio,
-              tasks=[
-                  ColourTask(settings),
-                  TimeScrollerTask(settings),
-              ],
-              devices=devices,
-              settings=settings)
+    tasks=[
+        FroggerTask(settings),
+        CursorTask(settings),
+        ColourTask(settings),
+        TimeScrollerTask(settings),
+    ],
+    devices=devices,
+    settings=settings)
